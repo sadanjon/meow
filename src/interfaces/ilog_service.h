@@ -2,6 +2,7 @@
 #define ILOG_SERVICE_H
 
 namespace meow {
+namespace interfaces {
 
 struct LogPriority {
 	enum Enum {
@@ -21,7 +22,8 @@ public:
 	virtual void warn(const char *format, ...) = 0;
 	virtual void error(const char *format, ...) = 0;
 };
-
+	
+} // namespace interfaces
 } // namespace meow
 
 

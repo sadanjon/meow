@@ -7,6 +7,7 @@
 #include "ishader_service.h"
 
 namespace meow {
+namespace interfaces {
 
 struct Program {
 	GLint id;
@@ -20,6 +21,8 @@ public:
 	virtual void destroy(const Program &program) = 0;
 };
 
+
+} // namespace interfaces
 } // namespace meow
 
 #endif // SHADER_PROGRAM_SERVICE_H

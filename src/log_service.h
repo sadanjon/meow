@@ -1,10 +1,11 @@
 #ifndef LOG_SERVICE_H 
 #define LOG_SERVICE_H
 
-#include "ilog_service.h"
+#include "interfaces/ilog_service.h"
 
 namespace meow {
-	
+using namespace interfaces;
+
 class LogService : public ILogService {
 public:
 

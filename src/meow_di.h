@@ -1,10 +1,6 @@
 #ifndef MEOW_DI_H 
 #define MEOW_DI_H
 
-#include "ibuffer_allocator.h"
-#include "ireader.h"
-#include "ishader_service.h"
-
 #include "buffer_allocator.h"
 #include "reader.h"
 #include "logged_shader_service.h"

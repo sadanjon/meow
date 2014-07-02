@@ -1,9 +1,10 @@
 #ifndef BUFFER_ALLOCATOR_H 
 #define BUFFER_ALLOCATOR_H
 
-#include "ibuffer_allocator.h"
+#include "interfaces/ibuffer_allocator.h"
 
 namespace meow {
+using namespace interfaces;
 	
 class BufferAllocator : public IBufferAllocator{
 public:

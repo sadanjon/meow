@@ -6,7 +6,8 @@
 #include <exception>
 
 namespace meow {
-
+namespace interfaces {
+	
 struct Shader {
 	GLuint id;
 };
@@ -23,12 +24,13 @@ public:
 	virtual ~IShaderService() {}
 	
 	virtual Shader create(const char *path, ShaderType::Enum shaderType) = 0;
-	virtual void destroy(const Shader &shader) = 0;
+	virtual void destroy(Shader *shader) = 0;
 
 	class InvalidShaderTypeEnum : public std::exception {};
 	class ShaderCompilationFailed : public std::exception {};
 };
 
+} // namespace interfaces
 } // namespace meow
 
 #endif // ISHADER_H

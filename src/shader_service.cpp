@@ -40,8 +40,8 @@ Shader ShaderService::createShaderFromId(GLint shaderId) {
 
 
 
-void ShaderService::destroy(const Shader &shader) {
-	glDeleteShader(shader.id);
+void ShaderService::destroy(Shader *shader) {
+	glDeleteShader(shader->id);
 	shader->id = 0;
 }
 

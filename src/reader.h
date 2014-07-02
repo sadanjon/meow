@@ -2,11 +2,12 @@
 #define READER_H
 
 #include "di.h"
-#include "ireader.h"
-#include "ibuffer_allocator.h"
-#include "ifile_system_service.h"
+#include "interfaces/ireader.h"
+#include "interfaces/ibuffer_allocator.h"
+#include "interfaces/ifile_system_service.h"
 
 namespace meow {
+using namespace interfaces;
 
 class Reader : public IReader {
 	di::Component<IBufferAllocator> m_bufferAllocator;

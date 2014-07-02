@@ -2,9 +2,10 @@
 #define LOGGED_SHADER_SERVICE_H
 
 #include "shader_service.h"
-#include "ilog_service.h"
+#include "interfaces/ilog_service.h"
 
 namespace meow {
+using namespace interfaces;
 	
 class LoggedShaderService : public ShaderService {
 	di::Component<ILogService> m_logService;

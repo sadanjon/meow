@@ -4,7 +4,7 @@
 
 #include "SDL.h"
 
-#include "ibuffer_allocator.h"
+#include "interfaces/ibuffer_allocator.h"
 
 namespace meow {
 	

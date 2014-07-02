@@ -4,9 +4,11 @@
 
 namespace meow {
 
-struct File {
-	SDL_RWops *sdlrwops;
-};
+namespace interfaces {
+	struct File {
+		SDL_RWops *sdlrwops;
+	};
+}
 
 static SDL_RWops *createSDLRWopsOrThrow(const char *path, const char *mode) {
 	auto ops = SDL_RWFromFile(path, mode);
@@ -50,11 +52,11 @@ size_t FileSystemService::read(File *file, Buffer *buffer) {
 	return readCount;
 }
 
-int64_t FileSystemService::tell(File *file) {
+size_t FileSystemService::tell(File *file) {
 	return SDL_RWtell(file->sdlrwops);
 }
 
-int64_t FileSystemService::seek(File *file, int64_t offset, SeekWhence::Enum whence) {
+size_t FileSystemService::seek(File *file, size_t offset, SeekWhence::Enum whence) {
 	return SDL_RWseek(file->sdlrwops, offset, whenceEnumToRWWhence(whence));
 }
 

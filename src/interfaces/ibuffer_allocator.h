@@ -4,6 +4,7 @@
 #include "buffer.h"
 
 namespace meow {
+namespace interfaces {
 
 class IBufferAllocator
 {
@@ -14,6 +15,7 @@ public:
 	virtual void destroy(Buffer *buffer) = 0;
 };
 
+} // namespace interfaces
 } // namespace meow
 
 #endif // IBUFFER_ALLOCATOR_H

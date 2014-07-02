@@ -2,7 +2,8 @@
 #define IREADER_H
 
 namespace meow {
-
+namespace interfaces {
+	
 struct Buffer;
 	
 class IReader
@@ -13,6 +14,7 @@ public:
 	virtual Buffer *read(const char *path) = 0;
 };
 
+} // namespace interfaces
 } // namespace meow
 
 #endif // IREADER_H
