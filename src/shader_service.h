@@ -3,11 +3,10 @@
 
 #include "di.h"
 #include "interfaces/ishader_service.h"
-#include "interfaces/ireader.h"
+#include "interfaces/readers/ireader.h"
 #include "interfaces/ibuffer_allocator.h"
 
 namespace meow {
-using namespace interfaces;
 
 class ShaderService : public IShaderService {
 protected:

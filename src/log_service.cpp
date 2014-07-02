@@ -1,7 +1,8 @@
-#include "log_service.h"
 
 #include <cstdio>
 #include <cstdarg>
+
+#include "log_service.h"
 
 #include "SDL.h"
 

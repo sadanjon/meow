@@ -1,9 +1,10 @@
+#include <cstdio>
+#include <exception>
+
 #include "shader_service.h"
 
 #include "../gl_extensions.h"
 
-#include <cstdio>
-#include <exception>
 
 namespace meow {
 

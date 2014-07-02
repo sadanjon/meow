@@ -7,6 +7,7 @@ namespace meow {
 	
 class Driver {
 	di::Component<IShaderService> m_shaderService;
+	di::Component<IOBJReader> m_objReader;
 public:
 	virtual ~Driver() {}
 	

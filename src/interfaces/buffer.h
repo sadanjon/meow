@@ -2,7 +2,6 @@
 #define BUFFER_H
 
 namespace meow {
-namespace interfaces {
 
 struct Buffer {
 	char *buffer;
@@ -10,7 +9,6 @@ struct Buffer {
 	size_t contentSize;
 };
 
-} // namespace interfaces
 } // namespace meow
 
 #endif // BUFFER_H

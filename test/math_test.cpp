@@ -1,5 +1,7 @@
-#include "../src/math.h"
 #include "gmock/gmock.h"  
+
+#include "../src/my_math.h"
+
 
 using namespace testing;
 

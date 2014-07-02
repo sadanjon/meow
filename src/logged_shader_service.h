@@ -5,7 +5,6 @@
 #include "interfaces/ilog_service.h"
 
 namespace meow {
-using namespace interfaces;
 	
 class LoggedShaderService : public ShaderService {
 	di::Component<ILogService> m_logService;

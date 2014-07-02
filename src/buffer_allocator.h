@@ -4,7 +4,6 @@
 #include "interfaces/ibuffer_allocator.h"
 
 namespace meow {
-using namespace interfaces;
 	
 class BufferAllocator : public IBufferAllocator{
 public:

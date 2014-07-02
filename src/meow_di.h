@@ -2,10 +2,12 @@
 #define MEOW_DI_H
 
 #include "buffer_allocator.h"
-#include "reader.h"
+#include "readers/reader.h"
+#include "readers/obj_reader.h"
 #include "logged_shader_service.h"
 #include "file_system_service.h"
 #include "log_service.h"
+
 
 #include "di.h"
 
@@ -17,6 +19,8 @@ DI_USE(meow::IShaderService, meow::ShaderService);
 #else
 DI_USE(meow::IShaderService, meow::LoggedShaderService);
 #endif
+
+DI_USE(meow::IOBJReader, meow::OBJReader);
 
 DI_USE(meow::IFileSystemService, meow::FileSystemService);
 DI_USE(meow::ILogService, meow::LogService);

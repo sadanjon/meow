@@ -1,12 +1,12 @@
 #ifndef ISHADER_H 
 #define ISHADER_H
 
-#include "SDL_opengl.h"
-
 #include <exception>
 
+#include "SDL_opengl.h"
+
+
 namespace meow {
-namespace interfaces {
 	
 struct Shader {
 	GLuint id;
@@ -30,7 +30,6 @@ public:
 	class ShaderCompilationFailed : public std::exception {};
 };
 
-} // namespace interfaces
 } // namespace meow
 
 #endif // ISHADER_H
