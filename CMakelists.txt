@@ -1,0 +1,58 @@
+project(meow CXX)
+cmake_minimum_required(VERSION 3.0)
+cmake_policy(SET CMP0015 NEW)
+enable_testing()
+
+option(DISABLE_LOGGING "disable logging" "OFF")
+
+if (CMAKE_COMPILER_IS_GNUCXX)
+	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=gnu++11")
+elseif(MSVC)
+	add_definitions("/D_CRT_SECURE_NO_WARNINGS")
+	if(NOT DEFINED ${CMAKE_BUILD_TYPE})
+		set(CMAKE_BUILD_TYPE "Debug")
+	endif()
+endif()
+
+if(DISABLE_LOGGING)
+	add_definitions("-DDISABLE_LOGGING")
+endif()
+
+find_package(OpenGL REQUIRED)
+include(cmake/SDL2.cmake)
+
+add_executable(drive drive.cpp gl_extensions.cpp gl_extensions.h 
+						src/buffer_allocator.cpp
+						src/buffer_allocator.h
+						src/di.h
+						src/driver.cpp
+						src/driver.h
+						src/ibuffer_allocator.h
+						src/ireader.h
+						src/math.cpp
+						src/math.h
+						src/meow_di.h
+						src/reader.cpp
+						src/reader.h
+						src/ishader_program_service.h
+						src/ishader_service.h
+						src/shader_service.h
+						src/shader_service.cpp
+						src/logged_shader_service.h
+						src/logged_shader_service.cpp
+						src/ifile_system_service.h
+						src/file_system_service.h
+						src/file_system_service.cpp
+						src/ilog_service.h
+						src/log_service.h
+						src/log_service.cpp
+						)
+
+include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
+target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES})
+
+
+add_custom_command(TARGET drive POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_LIBRARY_SHARED} $<TARGET_FILE_DIR:drive>)
+
+include(test/CMakeLists.txt)
