@@ -3,8 +3,8 @@
 
 #include <cstdint>
 #include <cstdio>
-#include <exception>
 
+#include "base_exception.h"
 #include "buffer.h"
 
 namespace meow {
@@ -30,9 +30,18 @@ public:
 	virtual size_t seek(File *file, size_t offset, SeekWhence::Enum whence) = 0;
 	virtual void close(File *file) = 0;
 
-	class FailedToOpenFile : public std::exception {};
-	class FailedToReadFile : public std::exception {};
-	class InvalidWhenceEnum : public std::exception {};
+
+	class FailedToOpenFile : public BaseException {
+		const char *m_fileName;
+	public:
+		FailedToOpenFile(const char *fileName) : m_fileName(fileName) {}
+		const char *getFileName() const {
+			return m_fileName;
+		}
+	};
+
+	class FailedToReadFile : public BaseException {};
+	class InvalidWhenceEnum : public BaseException {};
 };
 
 } // namespace meow

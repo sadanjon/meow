@@ -1,21 +1,78 @@
 #ifndef DI_H 
 #define DI_H
 
-#define DI_USE(I, T) \
-	namespace di { \
-	template<> \
-	struct Injection<I> { \
-		typedef T ImplementationType; \
-	}; \
-	}
+#include <unordered_map>
+#include <typeinfo>
+#include <string>
 
 namespace di {
 
-class DummyType {};
+struct ITypeInfo {
+	virtual const std::type_info *getTypeInfo() = 0;
+	virtual void *createNew() = 0;
 
-template<class T>
-struct Injection {
-	typedef DummyType ImplementationType;
+	struct TypeInfoHasher {
+		size_t operator()(ITypeInfo *ti) {
+			return ti->getTypeInfo()->hash_code();
+		}
+	};
+
+	struct TypeInfoComparer {
+		bool operator()(ITypeInfo *a, ITypeInfo *b) {
+			return a->getTypeInfo()->hash_code() == b->getTypeInfo()->hash_code();
+		}
+	};
+};
+
+template<typename T>
+struct TypeInfo : public ITypeInfo {
+	const std::type_info *getTypeInfo() {
+		return &typeid(T);
+	}
+
+	void *createNew() {
+		return new T();
+	}
+};
+
+template<typename T>
+struct InterfaceTypeInfo : public ITypeInfo {
+	const std::type_info *getTypeInfo() {
+		return &typeid(T);
+	}
+
+	void *createNew() {
+		return NULL;
+	}
+
+};
+
+
+class Registry {
+	typedef std::unordered_map<ITypeInfo*, ITypeInfo*, ITypeInfo::TypeInfoHasher, ITypeInfo::TypeInfoComparer> TypeMap;
+	TypeMap m_registry;
+public:
+	Registry();
+
+	static Registry *getInstance() {
+		static Registry *instance = new Registry();
+		return instance;
+	}
+
+	template<typename I, typename T>
+	void registerType() {
+		m_registry.insert(std::pair<ITypeInfo*, ITypeInfo*>(new InterfaceTypeInfo<I>(), new TypeInfo<T>()));
+	}
+
+	template<typename I>
+	I *createNew() {
+		auto t = m_registry.find(&InterfaceTypeInfo<I>());
+		if (t == m_registry.end())
+			throw new std::exception();
+		return reinterpret_cast<I*>(t->second->createNew());
+	}
+
+private:
 };
 
 template<typename T>
@@ -54,7 +111,7 @@ private:
 	}
 
 	T *createNew() {
-		return new typename Injection<T>::ImplementationType();
+		return Registry::getInstance()->createNew<T>();
 	}
 };
 

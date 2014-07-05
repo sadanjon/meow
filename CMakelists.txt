@@ -18,7 +18,6 @@ if(DISABLE_LOGGING)
 	add_definitions("-DDISABLE_LOGGING")
 endif()
 
-find_package(Boost 1.55.0 EXACT REQUIRED regex)
 find_package(OpenGL REQUIRED)
 include(cmake/SDL2.cmake)
 
@@ -29,8 +28,11 @@ add_executable(drive drive.cpp gl_extensions.cpp gl_extensions.h
 						src/interfaces/ibuffer_allocator.h
 						src/interfaces/ilog_service.h
 						src/interfaces/buffer.h
+						src/interfaces/base_exception.h
 						src/interfaces/model.h
 						src/interfaces/iiterator.h
+						src/interfaces/iexception_formatter.h
+						src/interfaces/idriver.h
 						src/interfaces/readers/ireader.h
 						src/interfaces/readers/iobj_reader.h
 						src/buffer_allocator.cpp
@@ -52,14 +54,14 @@ add_executable(drive drive.cpp gl_extensions.cpp gl_extensions.h
 						src/log_service.h
 						src/log_service.cpp
 						src/vector3.h
+						src/exception_formatter.h
+						src/exception_formatter.cpp
+						src/snprintf_polyfill.h
+						src/di.cpp
 						)
 
-include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-message(${Boost_LIBRARY_DIRS})
-#message(${Boost_REGEX_LIBRARIES})
-link_directories(${Boost_LIBRARY_DIRS})
-target_link_libraries(drive ${Boost_REGEX_LIBRARIES} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
-
+include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
+target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
 
 add_custom_command(TARGET drive POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_LIBRARY_SHARED} $<TARGET_FILE_DIR:drive>)

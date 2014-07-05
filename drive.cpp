@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <cstdint>
 #include <exception>
-
 #include "SDL.h"
 
 #include "gl_extensions.h"
@@ -15,7 +14,7 @@ int main(int argc, char **argv) {
 
 	SDL_Window *sdlWindow = createSDLWindow();
 	SDL_GLContext glContext = createSDLGLContext(sdlWindow);
-
+	
 	meow::Driver driver;
 	driver.run(argc, argv);
 

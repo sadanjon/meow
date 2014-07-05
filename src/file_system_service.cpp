@@ -28,7 +28,7 @@ private:
 static SDL_RWops *createSDLRWopsOrThrow(const char *path, const char *mode) {
 	auto ops = SDL_RWFromFile(path, mode);
 	if (ops == NULL)
-		throw new IFileSystemService::FailedToOpenFile();
+		throw new IFileSystemService::FailedToOpenFile(path);
 	return ops;
 }
 
