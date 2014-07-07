@@ -12,10 +12,10 @@ void Driver::run(int argc, char **argv) {
 		tryRun(argc, argv);
 	} catch (BaseException *e) {
 		m_exceptionFormatter->format(e, buffer);
-		fprintf(stderr, "%s", buffer->buffer);
+		m_logService->error("%s", buffer->buffer);
 	} catch (std::exception *e) {
 		m_exceptionFormatter->formatSTDException(e, buffer);
-		fprintf(stderr, "%s", buffer->buffer);
+		m_logService->error("%s", buffer->buffer);
 	}
 
 }
@@ -23,7 +23,7 @@ void Driver::run(int argc, char **argv) {
 void Driver::tryRun(int argc, char **argv) {
 	auto shader = m_shaderService->create("../src/shaders/simple.vs", ShaderType::VERTEX);
 	
-	m_objReader->read("../assets/twotri.obj");
+	m_modelService->createFromOBJFile("../assets/twotri.obj");
 
 	m_shaderService->destroy(&shader);
 }

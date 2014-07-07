@@ -13,7 +13,7 @@ void LoggedShaderService::compileShader(GLint shaderId) {
 
 Buffer *LoggedShaderService::getShaderInfoLog(GLint shaderId) {
 	auto buffer = m_bufferAllocator->allocate(getShaderInfoLogLength(shaderId));
-	glGetShaderInfoLog(shaderId, buffer->size, NULL, buffer->buffer);
+	glGetShaderInfoLog(shaderId, buffer->size, nullptr, buffer->buffer);
 	return buffer;
 }
 

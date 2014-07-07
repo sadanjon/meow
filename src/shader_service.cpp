@@ -18,7 +18,7 @@ Shader ShaderService::create(const char *path, ShaderType::Enum shaderType) {
 
 void ShaderService::setShaderSource(GLint shaderId, const char *path) {
 	auto buffer = m_reader->read(path);
-	glShaderSource(shaderId, 1, (const char **)&buffer->buffer, NULL);
+	glShaderSource(shaderId, 1, (const char **)&buffer->buffer, nullptr);
 	m_bufferAllocator->destroy(buffer);
 }
 

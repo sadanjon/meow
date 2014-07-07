@@ -42,37 +42,37 @@ struct InterfaceTypeInfo : public ITypeInfo {
 	}
 
 	void *createNew() {
-		return NULL;
+		return nullptr;
 	}
 
 };
 
-
-class Registry {
+class Container {
 	typedef std::unordered_map<ITypeInfo*, ITypeInfo*, ITypeInfo::TypeInfoHasher, ITypeInfo::TypeInfoComparer> TypeMap;
-	TypeMap m_registry;
+	static TypeMap m_registry;
 public:
-	Registry();
-
-	static Registry *getInstance() {
-		static Registry *instance = new Registry();
-		return instance;
-	}
-
 	template<typename I, typename T>
-	void registerType() {
+	static void registerType() {
 		m_registry.insert(std::pair<ITypeInfo*, ITypeInfo*>(new InterfaceTypeInfo<I>(), new TypeInfo<T>()));
 	}
 
 	template<typename I>
-	I *createNew() {
+	static I *createNew() {
 		auto t = m_registry.find(&InterfaceTypeInfo<I>());
 		if (t == m_registry.end())
-			throw new std::exception();
+			throw new InterfaceTypeNotFound<I>();
 		return reinterpret_cast<I*>(t->second->createNew());
 	}
 
-private:
+	template<typename T>
+	class InterfaceTypeNotFound : public std::exception {
+		mutable char buffer[512];
+	public:
+		const char *what() const throw() {
+			sprintf(buffer, "Interface type \"%512s\" not found", typeid(T).name());
+			return buffer;
+		}
+	};
 };
 
 template<typename T>
@@ -83,9 +83,18 @@ public:
 	Component() {
 		ref();
 	}
+
+	Component(const Component<T> &other) {
+		ref();
+	}
 	
 	~Component() { 
 		deref(); 
+	}
+
+	Component<T> &operator=(const Component<T> &other) {
+		ref();
+		return *this;
 	}
 
 	T &operator*() {
@@ -111,7 +120,7 @@ private:
 	}
 
 	T *createNew() {
-		return Registry::getInstance()->createNew<T>();
+		return Container::createNew<T>();
 	}
 };
 

@@ -5,12 +5,14 @@
 
 #include "gl_extensions.h"
 
+#include "src/meow_di.h"
 #include "src/driver.h"
 
 SDL_Window *createSDLWindow();
 SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow);
 
 int main(int argc, char **argv) {
+	meow::initializeDI();
 
 	SDL_Window *sdlWindow = createSDLWindow();
 	SDL_GLContext glContext = createSDLGLContext(sdlWindow);
