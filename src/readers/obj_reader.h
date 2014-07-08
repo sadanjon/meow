@@ -26,18 +26,19 @@ class OBJReader {
 	std::vector<float*> m_positions;
 	std::vector<float*> m_normals;
 	std::vector<float*> m_uvs;
-	std::vector<Vertex*> m_vertices;
-	std::vector<uint16_t> m_indices;
+	Model *m_model;
 	VertexMap m_vertexMap;
 public:
 	OBJReader();
 
 	Model *read(const char *path);
 private:
-	bool tryReadVector(const char *line, float *v);
-	bool tryReadPosition(const char *line, float *v);
-	bool tryReadNormal(const char *line, float *v);
-	bool tryReadUV(const char *line, float *v);
+	void createNewModel();
+
+	bool tryReadVector(const char *line);
+	bool tryReadPosition(const char *line);
+	bool tryReadNormal(const char *line);
+	bool tryReadUV(const char *line);
 
 	bool tryReadFace(const char *line);
 	bool tryReadPositionFace(const char *line);

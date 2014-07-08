@@ -13,17 +13,21 @@ OBJReader::OBJReader() : m_file(nullptr), m_buffer(nullptr), m_model(nullptr) {
 Model *OBJReader::read(const char *path) {
 	openFile(path);
 	allocateBuffer();
+	createNewModel();
 
 	while (auto line = readLine()) {
-		float *v = new float[3];
-		if (!tryReadVector(line, v))
-			delete[] v;
+		tryReadVector(line);
 		tryReadFace(line);
 	};
 	
 	closeFile();
 	destroyBuffer();
 	return nullptr;
+}
+
+void OBJReader::createNewModel() {
+	m_model = new Model();
+	model->meshes = new Model::MeshList();
 }
 
 const char *OBJReader::readLine() {
@@ -52,35 +56,52 @@ void OBJReader::destroyBuffer() {
 	m_buffer = nullptr;
 }
 
-bool OBJReader::tryReadVector(const char *line, float *v) {
-	if (tryReadPosition(line, v))
+bool OBJReader::tryReadVector(const char *line) {
+	if (tryReadPosition(line))
 		return true;
-	else if (tryReadNormal(line, v))
+	else if (tryReadNormal(line))
 		return true;
-	else if (tryReadUV(line, v))
+	else if (tryReadUV(line))
 		return true;
 	else
 		return false;
 }
 
-bool OBJReader::tryReadPosition(const char *line, float *v) {
+bool OBJReader::tryReadPosition(const char *line) {
+	float v[3];
 	auto success = sscanf(line, "v %20f %20f %20f", &v[0], &v[1], &v[2]) == 3;
-	if (success) 
-		m_positions.push_back(v);
+	if (success)  {
+		auto vector3 = new float[3];
+		vector3[0] = v[0];
+		vector3[1] = v[1];
+		vector3[2] = v[2];
+		m_positions.push_back(vector3);
+	}
 	return success;
 }
 
-bool OBJReader::tryReadNormal(const char *line, float *v) {
+bool OBJReader::tryReadNormal(const char *line) {
+	float v[3];
 	auto success = sscanf(line, "vn %20f %20f %20f", &v[0], &v[1], &v[2]) == 3;
-	if (success)
-		m_normals.push_back(v);
+	if (success) {
+		auto vector3 = new float[3];
+		vector3[0] = v[0];
+		vector3[1] = v[1];
+		vector3[2] = v[2];
+		m_normals.push_back(vector3);
+	}
 	return success;
 }
 
-bool OBJReader::tryReadUV(const char *line, float *v) {
-	auto success = sscanf(line, "vt %20f %20f %20f", &v[0], &v[1], &v[2]) == 3;
-	if (success)
+bool OBJReader::tryReadUV(const char *line) {
+	float v[2];
+	auto success = sscanf(line, "vt %20f %20f %20f", &v[0], &v[1]) == 2;
+	if (success) {
+		auto vector3 = new float[2];
+		vector3[0] = v[0];
+		vector3[1] = v[1];
 		m_uvs.push_back(v);
+	}
 	return success;
 } 
 
