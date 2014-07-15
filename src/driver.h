@@ -1,9 +1,9 @@
 #ifndef DRIVER_H 
 #define DRIVER_H
 
-#include "di.h"
-#include "ishader_service.h"
-#include "ibuffer_allocator.h"
+#include "infra/di.h"
+#include "gl/ishader_service.h"
+#include "infra/ibuffer_allocator.h"
 #include "ilog_service.h"
 #include "iexception_formatter.h"
 #include "imodel_service.h"

@@ -5,27 +5,20 @@
 namespace meow {
 
 void Driver::run(int argc, char **argv) {
-	auto buffer = m_bufferAllocator->allocate(1024);
-	m_exceptionFormatter->init();
-
 	try {
 		tryRun(argc, argv);
-	} catch (BaseException *e) {
-		m_exceptionFormatter->format(e, buffer);
-		m_logService->error("%s", buffer->buffer);
-	} catch (std::exception *e) {
-		m_exceptionFormatter->formatSTDException(e, buffer);
-		m_logService->error("%s", buffer->buffer);
+	} catch (std::exception &e) {
+		auto s = m_exceptionFormatter->format(e);
+		m_logService->error("%s", s.c_str());
 	}
 
 }
 	
 void Driver::tryRun(int argc, char **argv) {
-	auto shader = m_shaderService->create("../src/shaders/simple.vs", ShaderType::VERTEX);
-	
-	m_modelService->createFromOBJFile("../assets/twotri.obj");
+	// auto shader = m_shaderService->create("../src/shaders/simple.vs", ShaderType::VERTEX);
+	// m_shaderService->destroy(&shader);
 
-	m_shaderService->destroy(&shader);
+	auto model = m_modelService->createFromOBJFile("../assets/twotri.obj");
 }
 
 

@@ -1,24 +1,15 @@
 #ifndef MODEL_READER_SERVICE_H 
 #define MODEL_READER_SERVICE_H
 
-#include "di.h"
+#include "infra/di.h"
 #include "imodel_service.h"
 
 namespace meow {
 	
-class ModelService : IModelService {
+class ModelService : public IModelService {
 public:
-	Model *create();
-	Model *createFromOBJFile(const char *path);
-
-	void destroy(Model *model);
-
-private:
-	void destroyMeshes(Model::MeshList *meshes);
-	void destroyMesh(Mesh *mesh);
-	void destroyVertices(Mesh::VertexList *vertices);
-	void destroyIndices(Mesh::IndexList *indices);
-	void destroyVertex(Vertex *vertex);
+	std::shared_ptr<Model> create() override;
+	std::shared_ptr<Model> createFromOBJFile(const char *path) override;
 };
 
 } // namespace meow

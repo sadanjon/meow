@@ -1,41 +1,24 @@
 #include "exception_formatter.h"
 
-#include <cstdio>
-#include "snprintf_polyfill.h"
 #include <typeinfo>
 
-#include "ifile_system_service.h"
+#include "file_system/ifile_system_service.h"
 
 namespace meow {
 
-void baseExceptionFormatter(const BaseException *ex, Buffer *buffer) {
-	auto name = typeid(*ex).name();
-	buffer->contentSize = snprintf(buffer->buffer, buffer->size, "%s was thrown\n", name);
+std::string formatException(const std::exception &ex) {
+	auto name = typeid(ex).name();
+	return std::string(name) + " was thrown\n";
 }
 
-void failedToOpenFileExceptionFormatter(const BaseException *ex, Buffer *buffer) {
-	auto cex = static_cast<const IFileSystemService::FailedToOpenFile*>(ex);
-	auto name = typeid(*cex).name();
-	buffer->contentSize = snprintf(buffer->buffer, buffer->size, "%s was thrown. file: (%s)\n", name, cex->getFileName());
+std::string formatFailedToOpenFileException(const IFileSystemService::FailedToOpenFile &ex) {
+	return std::string("class IFileSystemService::FailedToOpenFile was thrown. file: ") + ex.getFileName() + "\n";
 }
 
-void ExceptionFormatter::init() throw() {
-}
-
-void ExceptionFormatter::destroy() throw() {
-
-}
-	
-void ExceptionFormatter::format(const BaseException *exception, Buffer *buffer) const throw() {
-	if (typeid(*exception) == typeid(IFileSystemService::FailedToOpenFile))
-		failedToOpenFileExceptionFormatter(exception, buffer);
-	else 
-		baseExceptionFormatter(exception, buffer);
-}
-
-void ExceptionFormatter::formatSTDException(const std::exception *exception, Buffer *buffer) const throw() {
-	auto name = typeid(*exception).name();
-	buffer->contentSize = snprintf(buffer->buffer, buffer->size, "%s was thrown\n", name);	
+std::string ExceptionFormatter::format(const std::exception &exception) const throw() {
+	if (typeid(exception) == typeid(IFileSystemService::FailedToOpenFile))
+		return formatFailedToOpenFileException(dynamic_cast<const IFileSystemService::FailedToOpenFile&>(exception));
+	return formatException(exception);
 }
 
 } // namespace meow

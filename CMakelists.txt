@@ -21,50 +21,8 @@ endif()
 find_package(OpenGL REQUIRED)
 include(cmake/SDL2.cmake)
 
-add_executable(drive drive.cpp gl_extensions.cpp gl_extensions.h 
-						src/interfaces/ishader_program_service.h
-						src/interfaces/ishader_service.h
-						src/interfaces/ifile_system_service.h
-						src/interfaces/ibuffer_allocator.h
-						src/interfaces/ilog_service.h
-						src/interfaces/buffer.h
-						src/interfaces/base_exception.h
-						src/interfaces/iiterator.h
-						src/interfaces/iexception_formatter.h
-						src/interfaces/idriver.h
-						src/interfaces/readers/ireader.h
-						src/interfaces/ivector3_service.h
-						src/interfaces/imodel_service.h
-						src/interfaces/model.h
-						src/buffer_allocator.cpp
-						src/buffer_allocator.h
-						src/di.h
-						src/di.cpp
-						src/driver.cpp
-						src/driver.h
-						src/meow_di.h
-						src/meow_di.cpp
-						src/readers/reader.cpp
-						src/readers/reader.h
-						src/readers/obj_reader.cpp
-						src/readers/obj_reader.h
-						src/readers/vertex_map.h
-						src/shader_service.h
-						src/shader_service.cpp
-						src/model_service.h
-						src/model_service.cpp
-						src/vector3_service.h
-						src/vector3_service.cpp
-						src/logged_shader_service.h
-						src/logged_shader_service.cpp
-						src/file_system_service.h
-						src/file_system_service.cpp
-						src/log_service.h
-						src/log_service.cpp
-						src/exception_formatter.h
-						src/exception_formatter.cpp
-						src/snprintf_polyfill.h
-						)
+file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.h")
+add_executable(drive ${SRC_FILES}) 
 
 include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
 target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
@@ -73,4 +31,5 @@ add_custom_command(TARGET drive POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_LIBRARY_SHARED} $<TARGET_FILE_DIR:drive>)
 
 include(test/CMakeLists.txt)
+
 
