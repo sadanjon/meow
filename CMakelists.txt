@@ -21,39 +21,15 @@ endif()
 find_package(OpenGL REQUIRED)
 include(cmake/SDL2.cmake)
 
-add_executable(drive drive.cpp gl_extensions.cpp gl_extensions.h 
-						src/interfaces/ishader_program_service.h
-						src/interfaces/ishader_service.h
-						src/interfaces/ifile_system_service.h
-						src/interfaces/ibuffer_allocator.h
-						src/interfaces/ilog_service.h
-						src/interfaces/buffer.h
-						src/interfaces/ireader.h
-						src/buffer_allocator.cpp
-						src/buffer_allocator.h
-						src/di.h
-						src/driver.cpp
-						src/driver.h
-						src/math.cpp
-						src/math.h
-						src/meow_di.h
-						src/reader.cpp
-						src/reader.h
-						src/shader_service.h
-						src/shader_service.cpp
-						src/logged_shader_service.h
-						src/logged_shader_service.cpp
-						src/file_system_service.h
-						src/file_system_service.cpp
-						src/log_service.h
-						src/log_service.cpp
-						)
+file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.h")
+add_executable(drive ${SRC_FILES}) 
 
-include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
-target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES})
-
+include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
+target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
 
 add_custom_command(TARGET drive POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_LIBRARY_SHARED} $<TARGET_FILE_DIR:drive>)
 
 include(test/CMakeLists.txt)
+
+
