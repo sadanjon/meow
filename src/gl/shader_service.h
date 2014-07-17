@@ -11,7 +11,7 @@ class ShaderService : public IShaderService {
 protected:
 	di::Component<IFileSystemService> m_fileSystemService;
 public:
-	Shader create(const char *path, ShaderType::Enum shaderType);
+	Shader create(const char *path, ShaderType shaderType);
 	void destroy(Shader *shader);
 
 protected:
@@ -21,7 +21,7 @@ private:
 	void setShaderSource(GLint shaderId, const char *path);
 	void checkShaderCompileStatus(GLint shaderId);
 	Shader createShaderFromId(GLint shaderId);
-	GLenum shaderTypeToGLEnum(ShaderType::Enum shaderType);
+	GLenum shaderTypeToGLEnum(ShaderType shaderType);
 };
 
 } // namespace meow

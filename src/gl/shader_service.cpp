@@ -8,7 +8,7 @@
 
 namespace meow {
 
-Shader ShaderService::create(const char *path, ShaderType::Enum shaderType) {
+Shader ShaderService::create(const char *path, ShaderType shaderType) {
 	auto id = glCreateShader(shaderTypeToGLEnum(shaderType));
 	setShaderSource(id, path);
 	compileShader(id);
@@ -47,7 +47,7 @@ void ShaderService::destroy(Shader *shader) {
 	shader->id = 0;
 }
 
-GLenum ShaderService::shaderTypeToGLEnum(ShaderType::Enum shaderType) {
+GLenum ShaderService::shaderTypeToGLEnum(ShaderType shaderType) {
 	switch (shaderType) {
 	case ShaderType::VERTEX:
 		return GL_VERTEX_SHADER;

@@ -230,4 +230,4 @@ extern GLBROKENEXTENSIONFN glBrokenExtension;
 #define GL_TESS_EVALUATION_SHADER 0x8E87
 #define GL_PATCH_VERTICES 0x8E72
 
-void LoadExtensions();
+void loadOpenGLExtensions();

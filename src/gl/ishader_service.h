@@ -12,18 +12,16 @@ struct Shader {
 	GLuint id;
 };
 
-struct ShaderType {
-	enum Enum {
-		VERTEX,
-		FRAGMENT
-	};
+enum class ShaderType {
+	VERTEX,
+	FRAGMENT
 };
 	
 class IShaderService {
 public:
 	virtual ~IShaderService() {}
 	
-	virtual Shader create(const char *path, ShaderType::Enum shaderType) = 0;
+	virtual Shader create(const char *path, ShaderType shaderType) = 0;
 	virtual void destroy(Shader *shader) = 0;
 
 	class InvalidShaderTypeEnum : public std::exception {};

@@ -82,7 +82,7 @@ GLBROKENEXTENSIONFN glBrokenExtension = NULL;
 	} \
 	if (name == NULL) { fprintf(stderr, "Completely failed to load OpenGL extension function '%s'. Use of this function will crash\n", #name); }
 
-void LoadExtensions() {
+void loadOpenGLExtensions() {
 
 	/* Shaders */
 

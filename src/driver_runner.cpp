@@ -1,48 +1,24 @@
-#include <cstdio>
-#include <cstdint>
+#include "driver_runner.h"
+
 #include <exception>
-#include "SDL.h"
+#include <cstdio>
 
-#include "gl_extensions.h"
+namespace meow {
 
-#include "infra/meow_di.h"
-#include "simple_driver.h"
-
-SDL_Window *createSDLWindow();
-SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow);
-
-int main(int argc, char **argv) {
-	meow::initializeDI();
-
+int DriverRunner::run(IDriver &driver, int argc, char **argv) {
 	SDL_Window *sdlWindow = createSDLWindow();
 	SDL_GLContext glContext = createSDLGLContext(sdlWindow);
 	
-	meow::SimpleDriver driver;
-	driver.run(argc, argv);
-
-	SDL_Event event;
-	bool running = true;
-	while (running) { 
-		uint32_t start = SDL_GetTicks();
-
-		while (SDL_PollEvent(&event)) {
-			running = event.type != SDL_QUIT;
-		}
-
-		SDL_GL_SwapWindow(sdlWindow);
-
-		//printf("%u\n", SDL_GetTicks() - start);
-	}
-
+	auto ret = driver.run(argc, argv);
 
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(sdlWindow);
 	SDL_Quit();
-	
-	return 0;
+
+	return ret;
 }
 
-SDL_Window *createSDLWindow() {
+SDL_Window *DriverRunner::createSDLWindow() {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
 		throw new std::exception("Failed to init SDL");
 
@@ -59,7 +35,7 @@ SDL_Window *createSDLWindow() {
 
 	return win;
 }
-SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow) {
+SDL_GLContext DriverRunner::createSDLGLContext(SDL_Window *sdlWindow) {
 	SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
 	SDL_GLContext context = SDL_GL_CreateContext(sdlWindow);
 
@@ -74,3 +50,4 @@ SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow) {
 	return context;
 }
 
+} // namespace meow

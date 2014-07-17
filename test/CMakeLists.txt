@@ -26,9 +26,42 @@ add_executable(obj_reader_test
 	src/log_service.cpp
 	)
 
+add_executable(shader_service_test 
+	test/integration/shader_service_test.cpp 
+	src/gl_extensions.h
+	src/gl_extensions.cpp
+	src/idriver_runner.h
+	src/driver_runner.h
+	src/driver_runner.cpp
+	src/infra/di.h
+	src/infra/di.cpp
+	src/file_system/ifile_system_service.h
+	src/file_system/file_system_service.h
+	src/file_system/file_system_service.cpp
+	src/file_system/ifile.h
+	src/file_system/file.h
+	src/file_system/file.cpp
+	src/file_system/iline_reader.h
+	src/file_system/line_reader.h
+	src/file_system/line_reader.cpp
+	src/file_system/itext_reader.h
+	src/file_system/text_reader.h
+	src/file_system/text_reader.cpp
+	src/gl/ishader_service.h
+	src/gl/shader_service.h
+	src/gl/shader_service.cpp
+	src/gl/logged_shader_service.h
+	src/gl/logged_shader_service.cpp
+	src/ilog_service.h
+	src/log_service.h
+	src/log_service.cpp
+	)
+
+
 include_directories(${GMOCK_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS})
 target_link_libraries(unit_tests ${GMOCK_LIBRARIES})
 target_link_libraries(obj_reader_test ${GMOCK_LIBRARIES} ${SDL2_LIBRARIES})
+target_link_libraries(shader_service_test ${GMOCK_LIBRARIES} ${SDL2_LIBRARIES})
 
 add_test(NAME unit 
          COMMAND unit_tests)
@@ -36,3 +69,6 @@ add_test(NAME unit
 add_test(NAME obj_reader 
          COMMAND obj_reader_test)
 
+
+add_test(NAME shader_service 
+         COMMAND shader_service_test)
