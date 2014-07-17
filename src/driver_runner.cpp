@@ -5,17 +5,20 @@
 
 namespace meow {
 
-int DriverRunner::run(IDriver &driver, int argc, char **argv) {
-	SDL_Window *sdlWindow = createSDLWindow();
-	SDL_GLContext glContext = createSDLGLContext(sdlWindow);
-	
-	auto ret = driver.run(argc, argv);
+DriverRunner::DriverRunner() :
+	m_sdlWindow(nullptr) {
+}
 
-	SDL_GL_DeleteContext(glContext);
-	SDL_DestroyWindow(sdlWindow);
+DriverRunner::~DriverRunner() {
+	SDL_GL_DeleteContext(m_sdlGLContext);
+	SDL_DestroyWindow(m_sdlWindow);
 	SDL_Quit();
+}
 
-	return ret;
+int DriverRunner::run(IDriver &driver, int argc, char **argv) {
+	m_sdlWindow = createSDLWindow();
+	m_sdlGLContext = createSDLGLContext();
+	return driver.run(argc, argv);
 }
 
 SDL_Window *DriverRunner::createSDLWindow() {
@@ -35,9 +38,10 @@ SDL_Window *DriverRunner::createSDLWindow() {
 
 	return win;
 }
-SDL_GLContext DriverRunner::createSDLGLContext(SDL_Window *sdlWindow) {
+
+SDL_GLContext DriverRunner::createSDLGLContext() {
 	SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
-	SDL_GLContext context = SDL_GL_CreateContext(sdlWindow);
+	SDL_GLContext context = SDL_GL_CreateContext(m_sdlWindow);
 
 	if (context == NULL) {
 		throw new std::exception("Failed to create SDL context");

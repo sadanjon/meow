@@ -7,12 +7,22 @@
 
 namespace meow {
 
+class Shader : public IShader {
+	GLuint m_id;
+	ShaderType m_type;
+public:
+	Shader(GLuint id, ShaderType type);
+	~Shader();
+
+	GLuint getID();
+	ShaderType getType();
+};
+
 class ShaderService : public IShaderService {
 protected:
 	di::Component<IFileSystemService> m_fileSystemService;
 public:
-	Shader create(const char *path, ShaderType shaderType);
-	void destroy(Shader *shader);
+	std::shared_ptr<IShader> create(const char *path, ShaderType shaderType) override;
 
 protected:
 	virtual void compileShader(GLint shaderId);
@@ -20,7 +30,6 @@ protected:
 private:
 	void setShaderSource(GLint shaderId, const char *path);
 	void checkShaderCompileStatus(GLint shaderId);
-	Shader createShaderFromId(GLint shaderId);
 	GLenum shaderTypeToGLEnum(ShaderType shaderType);
 };
 

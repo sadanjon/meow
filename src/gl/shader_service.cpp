@@ -8,12 +8,30 @@
 
 namespace meow {
 
-Shader ShaderService::create(const char *path, ShaderType shaderType) {
+
+Shader::Shader(GLuint id, ShaderType type) :
+	m_id(id),
+	m_type(type) {
+}
+
+Shader::~Shader() {
+	glDeleteShader(m_id);
+}
+
+GLuint Shader::getID() {
+	return m_id;
+}
+
+ShaderType Shader::getType() {
+	return m_type;
+}
+
+std::shared_ptr<IShader> ShaderService::create(const char *path, ShaderType shaderType) {
 	auto id = glCreateShader(shaderTypeToGLEnum(shaderType));
 	setShaderSource(id, path);
 	compileShader(id);
 	checkShaderCompileStatus(id);
-	return createShaderFromId(id);
+	return std::make_shared<Shader>(id, shaderType);
 }
 
 void ShaderService::setShaderSource(GLint shaderId, const char *path) {
@@ -32,19 +50,6 @@ void ShaderService::checkShaderCompileStatus(GLint shaderId) {
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus);
 	if (compileStatus == GL_FALSE)
 		throw new IShaderService::ShaderCompilationFailed();
-}
-
-Shader ShaderService::createShaderFromId(GLint shaderId) {
-	Shader shader;
-	shader.id = shaderId;
-	return shader;
-}
-
-
-
-void ShaderService::destroy(Shader *shader) {
-	glDeleteShader(shader->id);
-	shader->id = 0;
 }
 
 GLenum ShaderService::shaderTypeToGLEnum(ShaderType shaderType) {

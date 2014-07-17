@@ -2,27 +2,31 @@
 #define ISHADER_H
 
 #include <exception>
+#include <memory>
 
 #include "SDL_opengl.h"
 
 
 namespace meow {
-	
-struct Shader {
-	GLuint id;
-};
 
 enum class ShaderType {
 	VERTEX,
 	FRAGMENT
+};
+
+class IShader {
+public:
+	virtual ~IShader() {}
+
+	virtual GLuint getID() = 0;
+	virtual ShaderType getType() = 0;
 };
 	
 class IShaderService {
 public:
 	virtual ~IShaderService() {}
 	
-	virtual Shader create(const char *path, ShaderType shaderType) = 0;
-	virtual void destroy(Shader *shader) = 0;
+	virtual std::shared_ptr<IShader> create(const char *path, ShaderType shaderType) = 0;
 
 	class InvalidShaderTypeEnum : public std::exception {};
 	class ShaderCompilationFailed : public std::exception {};
