@@ -4,14 +4,12 @@
 #include "infra/di.h"
 #include "ishader_service.h"
 #include "file_system/ifile_system_service.h"
-#include "infra/ibuffer_allocator.h"
 
 namespace meow {
 
 class ShaderService : public IShaderService {
 protected:
 	di::Component<IFileSystemService> m_fileSystemService;
-	di::Component<IBufferAllocator> m_bufferAllocator;
 public:
 	Shader create(const char *path, ShaderType::Enum shaderType);
 	void destroy(Shader *shader);

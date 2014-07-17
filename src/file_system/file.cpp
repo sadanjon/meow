@@ -10,10 +10,8 @@ File::~File() {
 	close();
 }
 
-size_t File::read(std::weak_ptr<IBuffer> buffer) {
-	auto b = buffer.lock();
-	auto readCount = sdlReadOrThrow(m_sdlrwops, b->get(), 1, b->getSize());
-	b->setContentSize(getReadCountOrFileSize(readCount));
+size_t File::read(std::vector<char> &buffer) {
+	auto readCount = sdlReadOrThrow(m_sdlrwops, buffer.data(), buffer.size());
 	return readCount;
 }
 
@@ -26,17 +24,11 @@ size_t File::seek(size_t offset, FileSeekEnum whence) {
 }
 
 size_t File::getSize() {
-	auto c = SDL_RWtell(m_sdlrwops);
-	auto e = SDL_RWseek(m_sdlrwops, 0, RW_SEEK_END);
-	SDL_RWseek(m_sdlrwops, c, RW_SEEK_SET);
-	return e;
+	return getFileSize();
 }
 
 bool File::isEOF() {
-	auto c = SDL_RWtell(m_sdlrwops);
-	auto e = SDL_RWseek(m_sdlrwops, 0, RW_SEEK_END);
-	SDL_RWseek(m_sdlrwops, c, RW_SEEK_SET);
-	return c == e;
+	return SDL_RWtell(m_sdlrwops) == getFileSize();
 }
 
 void File::close() {
@@ -46,11 +38,12 @@ void File::close() {
 	m_sdlrwops = nullptr;
 }
 
-size_t File::sdlReadOrThrow(SDL_RWops *sdlrwops, void *ptr, size_t size, size_t maxnum) {
-	auto readCount = SDL_RWread(sdlrwops, ptr, size, maxnum);
-	if (*SDL_GetError() != '\0')
+size_t File::sdlReadOrThrow(SDL_RWops *sdlrwops, void *ptr, size_t amount) {
+	auto b = SDL_RWtell(m_sdlrwops);
+	auto readCount = SDL_RWread(sdlrwops, ptr, sizeof(char), amount);
+	if (readCount == 0 && *SDL_GetError() != '\0')
 		throw new IFile::FailedToReadFile();
-	return readCount;
+	return SDL_RWtell(m_sdlrwops) - b;
 }
 
 size_t File::getReadCountOrFileSize(size_t readCount) {
@@ -72,5 +65,20 @@ int File::whenceEnumToRWWhence(FileSeekEnum whenceEnum) {
 		throw new IFile::InvalidWhenceEnum();
 	}
 }
+
+size_t File::getFileSize() {
+	if (!m_fileSize.exists())
+		m_fileSize = calculateFileSize();
+	return m_fileSize.get();
+}
+
+size_t File::calculateFileSize() {
+	auto c = SDL_RWtell(m_sdlrwops);
+	auto e = SDL_RWseek(m_sdlrwops, 0, RW_SEEK_END);
+	SDL_RWseek(m_sdlrwops, c, RW_SEEK_SET);
+	return e;
+}
+
+
 
 } // namespace meow

@@ -6,8 +6,6 @@ add_executable(obj_reader_test
 	test/integration/obj_reader_test.cpp 
 	src/infra/di.h
 	src/infra/di.cpp
-	src/infra/buffer_allocator.h
-	src/infra/buffer_allocator.cpp
 	src/model_service.h
 	src/model_service.cpp
 	src/file_system/file_system_service.h

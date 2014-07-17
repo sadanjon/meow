@@ -3,7 +3,6 @@
 
 #include "infra/di.h"
 #include "gl/ishader_service.h"
-#include "infra/ibuffer_allocator.h"
 #include "ilog_service.h"
 #include "iexception_formatter.h"
 #include "imodel_service.h"
@@ -14,7 +13,6 @@ namespace meow {
 	
 class Driver : public IDriver {
 	di::Component<IShaderService> m_shaderService;
-	di::Component<IBufferAllocator> m_bufferAllocator;
 	di::Component<IModelService> m_modelService;
 	di::Component<IExceptionFormatter> m_exceptionFormatter;
 	di::Component<ILogService> m_logService;

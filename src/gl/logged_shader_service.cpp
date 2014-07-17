@@ -7,13 +7,13 @@ namespace meow {
 void LoggedShaderService::compileShader(GLint shaderId) {
 	ShaderService::compileShader(shaderId);
 	auto infoLogBuffer = getShaderInfoLog(shaderId);
-	m_logService->info("Shader Info Log:\n%s\n", infoLogBuffer->get());
+	m_logService->info("Shader Info Log:\n%s\n", infoLogBuffer.c_str());
 }
 
-std::shared_ptr<IBuffer> LoggedShaderService::getShaderInfoLog(GLint shaderId) {
-	auto buffer = m_bufferAllocator->allocate(getShaderInfoLogLength(shaderId));
-	glGetShaderInfoLog(shaderId, buffer->getSize(), nullptr, buffer->get());
-	return buffer;
+std::string LoggedShaderService::getShaderInfoLog(GLint shaderId) {
+	std::vector<char> buffer(getShaderInfoLogLength(shaderId));
+	glGetShaderInfoLog(shaderId, buffer.size(), nullptr, buffer.data());
+	return buffer.data();
 }
 
 int LoggedShaderService::getShaderInfoLogLength(GLint shaderId) {

@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "file_system/file_system_service.h"
-#include "infra/buffer_allocator.h"
 #include "model_service.h"
 #include "log_service.h"
 #include "infra/di.h"
@@ -18,7 +17,6 @@ public:
 
 	OBJReaderTest() {
 		di::Container::registerType<meow::IFileSystemService, meow::FileSystemService>();
-		di::Container::registerType<meow::IBufferAllocator, meow::BufferAllocator>();
 		di::Container::registerType<meow::IModelService, meow::ModelService>();
 		di::Container::registerType<meow::ILogService, meow::ModelService>();
 

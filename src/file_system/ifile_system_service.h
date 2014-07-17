@@ -6,7 +6,6 @@
 #include <memory>
 #include <string>
 
-#include "infra/ibuffer_allocator.h"
 #include "infra/optional.h"
 #include "ifile.h"
 #include "iline_reader.h"

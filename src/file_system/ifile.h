@@ -3,11 +3,11 @@
 
 #include <memory>
 #include <exception>
-
-#include "infra/ibuffer_allocator.h"
+#include <vector>
+#include <array>
 
 namespace meow {
-	
+
 enum class FileSeekEnum {
 	SET,
 	CUR,
@@ -17,7 +17,7 @@ enum class FileSeekEnum {
 class IFile {
 public:
 	virtual ~IFile() {}
-	virtual size_t read(std::weak_ptr<IBuffer> buffer) = 0;
+	virtual size_t read(std::vector<char> &buffer) = 0;
 	virtual size_t tell() = 0;
 	virtual size_t seek(size_t offset, FileSeekEnum whence) = 0;
 	virtual size_t getSize() = 0;

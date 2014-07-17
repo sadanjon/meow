@@ -9,7 +9,6 @@
 #include "infra/di.h"
 #include "model.h"
 #include "file_system/ifile_system_service.h"
-#include "infra/ibuffer_allocator.h"
 #include "ilog_service.h"
 #include "iobj_reader.h"
 #include "vertex_indices_map.h"
@@ -24,7 +23,6 @@ class OBJReader : public IOBJReader {
 	typedef std::vector<std::shared_ptr<Vector2>> Vector2List;
 
 	di::Component<IFileSystemService> m_fileSystemService;
-	di::Component<IBufferAllocator> m_bufferAllocator;
 	di::Component<ILogService> m_logService;
 
 	const std::string m_filePath;
