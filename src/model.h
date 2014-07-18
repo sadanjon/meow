@@ -28,7 +28,7 @@ public:
 };
 
 typedef std::vector<std::shared_ptr<Vertex>> VertexList;
-typedef std::vector<uint16_t> IndexList;
+typedef std::vector<uint32_t> IndexList;
 
 struct Mesh {
 	std::shared_ptr<VertexList> vertices;
