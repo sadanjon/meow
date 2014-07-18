@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "infra/di.h"
+#include "iwindow_service.h"
 #include "idriver_runner.h"
 #include "SDL.h"
 #include "gl_extensions.h"
@@ -10,16 +12,9 @@
 namespace meow {
 	
 class DriverRunner : public IDriverRunner {
-	SDL_Window *m_sdlWindow;
-	SDL_GLContext m_sdlGLContext;
+	di::Component<IWindowService> m_windowService;
 public:
-	DriverRunner();
-	~DriverRunner();
 	int run(IDriver &driver, int argc, char **argv) override;
-
-private:
-	SDL_Window *createSDLWindow();
-	SDL_GLContext createSDLGLContext();
 };
 
 } // namespace meow
