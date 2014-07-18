@@ -18,15 +18,18 @@ class IShader {
 public:
 	virtual ~IShader() {}
 
-	virtual GLuint getID() = 0;
-	virtual ShaderType getType() = 0;
+	virtual const std::string &getSource() const = 0;
+	virtual GLuint getID() const = 0;
+	virtual ShaderType getType() const = 0;
 };
 	
 class IShaderService {
 public:
 	virtual ~IShaderService() {}
 	
-	virtual std::shared_ptr<IShader> create(const char *path, ShaderType shaderType) = 0;
+	virtual std::shared_ptr<IShader> create(ShaderType shaderType) = 0;
+	virtual void attachSource(IShader &shader, std::string &source) = 0;
+	virtual void compile(IShader &shader) = 0;
 
 	class InvalidShaderTypeEnum : public std::exception {};
 	class ShaderCompilationFailed : public std::exception {};

@@ -8,51 +8,28 @@
 
 namespace meow {
 
-
-Shader::Shader(GLuint id, ShaderType type) :
-	m_id(id),
+Shader::Shader(ShaderType type) :
 	m_type(type) {
+	m_id = glCreateShader(shaderTypeToGLEnum(type));
 }
 
 Shader::~Shader() {
 	glDeleteShader(m_id);
 }
 
-GLuint Shader::getID() {
+const std::string &Shader::getSource() const {
+	return m_source;
+}
+
+GLuint Shader::getID() const {
 	return m_id;
 }
 
-ShaderType Shader::getType() {
+ShaderType Shader::getType() const {
 	return m_type;
 }
 
-std::shared_ptr<IShader> ShaderService::create(const char *path, ShaderType shaderType) {
-	auto id = glCreateShader(shaderTypeToGLEnum(shaderType));
-	setShaderSource(id, path);
-	compileShader(id);
-	checkShaderCompileStatus(id);
-	return std::make_shared<Shader>(id, shaderType);
-}
-
-void ShaderService::setShaderSource(GLint shaderId, const char *path) {
-	auto reader = m_fileSystemService->getTextReader(path);
-	auto buffer = reader->read();
-	auto c = buffer.c_str();
-	glShaderSource(shaderId, 1, (const char **)&c, nullptr);
-}
-
-void ShaderService::compileShader(GLint shaderId) {
-	glCompileShader(shaderId);
-}
-
-void ShaderService::checkShaderCompileStatus(GLint shaderId) {
-	GLint compileStatus;
-	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus);
-	if (compileStatus == GL_FALSE)
-		throw new IShaderService::ShaderCompilationFailed();
-}
-
-GLenum ShaderService::shaderTypeToGLEnum(ShaderType shaderType) {
+GLenum Shader::shaderTypeToGLEnum(ShaderType shaderType) {
 	switch (shaderType) {
 	case ShaderType::VERTEX:
 		return GL_VERTEX_SHADER;
@@ -62,6 +39,30 @@ GLenum ShaderService::shaderTypeToGLEnum(ShaderType shaderType) {
 		throw new IShaderService::InvalidShaderTypeEnum();
 	}
 }
+
+std::shared_ptr<IShader> ShaderService::create(ShaderType shaderType) {
+	return std::make_shared<Shader>(shaderType);
+}
+
+void ShaderService::attachSource(IShader &shader, std::string &source) {
+	auto c = source.c_str();
+	glShaderSource(shader.getID(), 1, (const char **)&c, nullptr);
+	static_cast<Shader&>(shader).m_source = source;
+}
+
+void ShaderService::compile(IShader &shader) {
+	glCompileShader(shader.getID());
+	checkShaderCompileStatus(shader.getID());
+}
+
+void ShaderService::checkShaderCompileStatus(GLint shaderId) {
+	GLint compileStatus;
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus);
+	if (compileStatus == GL_FALSE)
+		throw new IShaderService::ShaderCompilationFailed();
+}
+
+
 
 
 } // namespace meow

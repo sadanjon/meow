@@ -1,12 +1,12 @@
 #include "logged_shader_service.h"
 
-#include "../gl_extensions.h"
+#include "gl_extensions.h"
 
 namespace meow {
 
-void LoggedShaderService::compileShader(GLint shaderId) {
-	ShaderService::compileShader(shaderId);
-	auto infoLogBuffer = getShaderInfoLog(shaderId);
+void LoggedShaderService::compile(IShader &shader) {
+	ShaderService::compile(shader);
+	auto infoLogBuffer = getShaderInfoLog(shader.getID());
 	m_logService->info("Shader Info Log:\n%s\n", infoLogBuffer.c_str());
 }
 

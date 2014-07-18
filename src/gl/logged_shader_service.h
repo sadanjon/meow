@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "infra/di.h"
 #include "shader_service.h"
 #include "ilog_service.h"
 
@@ -11,8 +12,8 @@ namespace meow {
 	
 class LoggedShaderService : public ShaderService {
 	di::Component<ILogService> m_logService;
-protected:
-	void compileShader(GLint shaderId);
+public:
+	void compile(IShader &shaderId) override;
 
 private:
 	std::string getShaderInfoLog(GLint shaderId);

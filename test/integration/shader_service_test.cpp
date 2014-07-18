@@ -20,15 +20,20 @@ void initializeDI() {
 
 class ShaderServiceTest : public Test {
 public:
+	std::shared_ptr<IFileSystemService> fileSystemService;
 	std::shared_ptr<IShaderService> shaderService;
 
 	ShaderServiceTest() {
+		fileSystemService = std::make_shared<FileSystemService>();
 		shaderService = std::make_shared<LoggedShaderService>();
 	}
 };
 
 TEST_F(ShaderServiceTest, simple) {
-	auto shader = shaderService->create("../test/assets/shader_service_test/simple.vs", ShaderType::VERTEX);
+	auto reader = fileSystemService->getTextReader("../test/assets/shader_service_test/simple.vs");
+	auto shader = shaderService->create(ShaderType::VERTEX);
+	shaderService->attachSource(*shader, reader->read());
+	shaderService->compile(*shader);
 	EXPECT_TRUE(true);
 }
 

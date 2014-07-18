@@ -6,6 +6,7 @@
 #include "gl_extensions.h"
 
 #include "infra/meow_di.h"
+#include "driver_runner.h"
 #include "simple_driver.h"
 
 SDL_Window *createSDLWindow();
@@ -14,32 +15,10 @@ SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow);
 int main(int argc, char **argv) {
 	meow::initializeDI();
 
-	SDL_Window *sdlWindow = createSDLWindow();
-	SDL_GLContext glContext = createSDLGLContext(sdlWindow);
-	
 	meow::SimpleDriver driver;
-	driver.run(argc, argv);
+	meow::DriverRunner driverRunner;
 
-	SDL_Event event;
-	bool running = true;
-	while (running) { 
-		uint32_t start = SDL_GetTicks();
-
-		while (SDL_PollEvent(&event)) {
-			running = event.type != SDL_QUIT;
-		}
-
-		SDL_GL_SwapWindow(sdlWindow);
-
-		//printf("%u\n", SDL_GetTicks() - start);
-	}
-
-
-	SDL_GL_DeleteContext(glContext);
-	SDL_DestroyWindow(sdlWindow);
-	SDL_Quit();
-	
-	return 0;
+	return driverRunner.run(driver, argc, argv);
 }
 
 SDL_Window *createSDLWindow() {
@@ -73,4 +52,18 @@ SDL_GLContext createSDLGLContext(SDL_Window *sdlWindow) {
 
 	return context;
 }
+
+//SDL_Event event;
+//bool running = true;
+//while (running) {
+//	uint32_t start = SDL_GetTicks();
+//
+//	while (SDL_PollEvent(&event)) {
+//		running = event.type != SDL_QUIT;
+//	}
+//
+//	SDL_GL_SwapWindow(sdlWindow);
+//
+//	//printf("%u\n", SDL_GetTicks() - start);
+//}
 

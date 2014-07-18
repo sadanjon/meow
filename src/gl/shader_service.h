@@ -1,36 +1,38 @@
 #ifndef SHADER_H 
 #define SHADER_H
 
-#include "infra/di.h"
+#include <string>
+
 #include "ishader_service.h"
-#include "file_system/ifile_system_service.h"
 
 namespace meow {
 
 class Shader : public IShader {
+	friend class ShaderService;
+	
 	GLuint m_id;
 	ShaderType m_type;
+	std::string m_source;
 public:
-	Shader(GLuint id, ShaderType type);
+	Shader(ShaderType type);
 	~Shader();
-
-	GLuint getID();
-	ShaderType getType();
+	
+	GLuint getID() const override;
+	ShaderType getType() const override;
+	const std::string &getSource() const override;
+private:
+	GLenum shaderTypeToGLEnum(ShaderType shaderType);
 };
 
 class ShaderService : public IShaderService {
-protected:
-	di::Component<IFileSystemService> m_fileSystemService;
 public:
-	std::shared_ptr<IShader> create(const char *path, ShaderType shaderType) override;
-
-protected:
-	virtual void compileShader(GLint shaderId);
+	std::shared_ptr<IShader> create(ShaderType shaderType) override;
+	void attachSource(IShader &shader, std::string &source) override;
+	void compile(IShader &shader) override;
 
 private:
-	void setShaderSource(GLint shaderId, const char *path);
 	void checkShaderCompileStatus(GLint shaderId);
-	GLenum shaderTypeToGLEnum(ShaderType shaderType);
+	
 };
 
 } // namespace meow
