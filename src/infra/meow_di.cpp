@@ -7,7 +7,6 @@
 #include "exception_formatter.h"
 #include "log_service.h"
 #include "model_service.h"
-#include "math/vector3_service.h"
 #include "window_service.h"
 #include "main_loop_service.h"
 
@@ -18,7 +17,6 @@ void initializeDI() {
 	di::Container::registerType<meow::IShaderService, meow::ShaderService>();
 	di::Container::registerType<meow::IShaderProgramService, meow::ShaderProgramService>();
 	di::Container::registerType<meow::IModelService, meow::ModelService>();
-	di::Container::registerType<meow::IVector3Service, meow::Vector3Service>();
 	di::Container::registerType<meow::IExceptionFormatter, meow::ExceptionFormatter>();
 	di::Container::registerType<meow::ILogService, meow::LogService>();
 	di::Container::registerType<meow::IWindowService, meow::WindowService>();

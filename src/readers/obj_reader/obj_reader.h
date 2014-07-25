@@ -12,15 +12,15 @@
 #include "ilog_service.h"
 #include "iobj_reader.h"
 #include "vertex_indices_map.h"
-#include "math/vector3.h"
-#include "math/vector2.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace meow {
 
 class OBJReader : public IOBJReader {
 	static const int BUFFER_SIZE = 512;
-	typedef std::vector<std::shared_ptr<Vector3>> Vector3List;
-	typedef std::vector<std::shared_ptr<Vector2>> Vector2List;
+	typedef std::vector<std::shared_ptr<glm::vec3>> Vector3List;
+	typedef std::vector<std::shared_ptr<glm::vec2>> Vector2List;
 
 	di::Component<IFileSystemService> m_fileSystemService;
 	di::Component<ILogService> m_logService;

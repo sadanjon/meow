@@ -20,11 +20,12 @@ endif()
 
 find_package(OpenGL REQUIRED)
 include(cmake/SDL2.cmake)
+include(cmake/glm.cmake)
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.h")
 add_executable(drive ${SRC_FILES}) 
 
-include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
+include_directories(src src/interfaces ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS})
 target_link_libraries(drive ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
 
 add_custom_command(TARGET drive POST_BUILD

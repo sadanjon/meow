@@ -5,15 +5,15 @@
 #include <cstdint>
 #include <memory>
 
-#include "math/vector3.h"
-#include "math/vector2.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include "infra/optional.h"
 
 namespace meow {
 
 class Vertex {
 public:
-	Vertex(Optional<Vector3> &position,	Optional<Vector3> &normal, Optional<Vector2> &uv) :
+	Vertex(Optional<glm::vec3> &position, Optional<glm::vec3> &normal, Optional<glm::vec2> &uv) :
 		position(position),
 		normal(normal),
 		uv(uv) {
@@ -22,9 +22,9 @@ public:
 	Vertex() {
 	}
 
-	Optional<Vector3> position;
-	Optional<Vector3> normal;
-	Optional<Vector2> uv;
+	Optional<glm::vec3> position;
+	Optional<glm::vec3> normal;
+	Optional<glm::vec2> uv;
 };
 
 typedef std::vector<std::shared_ptr<Vertex>> VertexList;
@@ -44,3 +44,4 @@ struct Model {
 } // namespace meow
 
 #endif // MODEL_H
+

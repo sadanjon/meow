@@ -62,7 +62,7 @@ bool OBJReader::tryReadPosition(const char *line) {
 	float v[3];
 	auto success = sscanf(line, "v %20f %20f %20f", &v[0], &v[1], &v[2]) == 3;
 	if (success) 
-		m_positions.push_back(std::make_shared<Vector3>(v));
+		m_positions.push_back(std::make_shared<glm::vec3>(v[0], v[1], v[2]));
 	return success;
 }
 
@@ -70,7 +70,7 @@ bool OBJReader::tryReadNormal(const char *line) {
 	float v[3];
 	auto success = sscanf(line, "vn %20f %20f %20f", &v[0], &v[1], &v[2]) == 3;
 	if (success) 
-		m_normals.push_back(std::make_shared<Vector3>(v));
+		m_normals.push_back(std::make_shared<glm::vec3>(v[0], v[1], v[2]));
 	return success;
 }
 
@@ -78,7 +78,7 @@ bool OBJReader::tryReadUV(const char *line) {
 	float v[2];
 	auto success = sscanf(line, "vt %20f %20f %20f", &v[0], &v[1]) == 2;
 	if (success) 
-		m_uvs.push_back(std::make_shared<Vector2>(v));
+		m_uvs.push_back(std::make_shared<glm::vec2>(v[0], v[1]));
 	return success;
 } 
 
