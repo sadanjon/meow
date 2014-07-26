@@ -15,6 +15,8 @@ class Shader : public IShader {
 	std::string m_source;
 public:
 	Shader(ShaderType type);
+	Shader(const Shader &) = delete;
+	Shader &operator=(Shader) = delete;
 	~Shader();
 	
 	GLuint getID() const override;

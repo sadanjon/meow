@@ -17,6 +17,8 @@ struct Surface {
 	bool hasNormals;
 	bool hasUVs;
 	int stride;
+	int vertexCount;
+	int indexCount;
 };
 
 typedef std::vector<std::shared_ptr<Surface>> SurfaceList;

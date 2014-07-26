@@ -3,10 +3,14 @@
 
 #include <vector>
 #include <exception>
+#include <string>
+
+#include "glm/matrix.hpp"
 
 #include "ishader_service.h"
-
-#include "../gl_extensions.h"
+#include "gl_extensions.h"
+#include "renderable.h"
+#include "infra/optional.h"
 
 namespace meow {
 
@@ -18,6 +22,12 @@ public:
 	virtual GLuint getID() const = 0;
 };
 
+struct SurfaceAttributeIDs {
+	int position;
+	Optional<int> normal;
+	Optional<int> uv;
+};
+
 class IShaderProgramService {
 public:
 	virtual ~IShaderProgramService() {};
@@ -25,6 +35,13 @@ public:
 	virtual std::shared_ptr<IProgram> create() = 0;
 	virtual void addShader(IProgram &program, const std::shared_ptr<IShader> &shader) = 0;
 	virtual void link(IProgram &program) = 0;
+	virtual void use(IProgram &program) = 0;
+	virtual void setUniformIDs(IProgram &program, const std::vector<std::string> &uniforms) = 0;
+	virtual void setAttributeIDs(IProgram &program, const std::vector<std::string> &attributes) = 0;
+	virtual void setMatrix4(IProgram &program, int uniformID, const glm::mat4 &matrix4) = 0;
+	virtual void enableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) = 0;
+	virtual void disableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) = 0;
+	virtual void drawSurface(IProgram &program, const Surface &surface) = 0;
 
 	class LinkProgramFailed : public std::exception {};
 };

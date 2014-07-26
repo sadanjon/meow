@@ -21,6 +21,8 @@ std::shared_ptr<Surface> ModelToRenderableConverter::meshToSurface(const Mesh &m
 	surface->stride = calculateStride(*mesh.vertices->front());
 	surface->hasNormals = mesh.vertices->front()->normal.exists();
 	surface->hasUVs = mesh.vertices->front()->uv.exists();
+	surface->vertexCount = mesh.vertices->size();
+	surface->indexCount = mesh.indices->size();
 	return surface;
 }
 

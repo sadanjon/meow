@@ -12,6 +12,8 @@ class VBO : public IVBO {
 
 public:
 	VBO();
+	VBO(const VBO &) = delete;
+	VBO &operator=(VBO) = delete;
 	~VBO();
 
 	void setIndexData(const std::vector<uint32_t> &indices) override;

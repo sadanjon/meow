@@ -14,6 +14,10 @@ class Camera : public ICamera {
 	glm::vec3 m_target;
 	glm::vec3 m_up;
 public:
+	Camera() {};
+	Camera(const Camera &) = delete;
+	Camera &operator=(Camera camera) = delete;
+
 	const glm::mat4 &getViewMatrix() const override;
 	const glm::mat4 &getProjectionMatrix() const override;
 	const glm::vec3 &getPosition() const override;

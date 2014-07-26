@@ -16,7 +16,10 @@ class File : public IFile {
 public:
 	
 	File(SDL_RWops *sdlrwops);
+	File(const File &) = delete;
+	File &operator=(File) = delete;
 	~File();
+
 	size_t read(std::vector<char> &buffer) override;
 	size_t tell() override;
 	size_t seek(size_t offset, FileSeekEnum whence) override;
