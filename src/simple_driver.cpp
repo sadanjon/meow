@@ -3,7 +3,10 @@
 #include "simple_driver.h"
 
 #include "entities/icamera_service.h"
+#include "glm/geometric.hpp"
 #include "glm/trigonometric.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 namespace meow {
 
@@ -13,26 +16,51 @@ class SimpleDriverLoopHandler : public ILoopHandler {
 	di::Component<IShaderProgramService> m_shaderProgramService;
 
 	bool m_requestQuit;
+	bool m_captureMouse;
 	std::shared_ptr<IProgram> m_program;
 	std::shared_ptr<Renderable> m_renderable;
 	std::shared_ptr<ICamera> m_camera;
 public:
 	SimpleDriverLoopHandler(const std::shared_ptr<IProgram> &program, std::shared_ptr<Renderable> &renderable) :
 		m_requestQuit(false),
+		m_captureMouse(false),
 		m_program(program),
 		m_renderable(renderable) {
 
 		m_camera = m_cameraService->create();
+		m_cameraService->lookAt(*m_camera, LookAtParameters{ glm::vec3(0, 0, -10), glm::vec3(0), glm::vec3(0, 1, 0) });
 		m_cameraService->perspective(*m_camera, PerspectiveParameters{glm::radians(45.0f), 1.0f, 0.1f, 1000.0f});
 	}
 
-	void event(const Event &event) override {
-		if (event.eventType == EventType::QUIT)
+	void event(const SDL_Event &event) override {
+		if (event.type == SDL_QUIT)
 			m_requestQuit = true;
+		if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
+			m_captureMouse = !m_captureMouse;
+			SDL_SetRelativeMouseMode(m_captureMouse ? SDL_TRUE : SDL_FALSE);
+		}
+		if (m_captureMouse)
+			updateCamera(event);
+	}
+
+	void updateCamera(const SDL_Event &event) {
+		if (event.type == SDL_MOUSEMOTION) {
+			auto x = event.motion.xrel * -0.005f;
+			auto y = event.motion.yrel * 0.005f;
+			auto position = glm::rotateY(m_camera->getPosition(), x);
+			auto axis = glm::normalize(glm::cross(position - m_camera->getTarget(), glm::vec3(0, 1, 0)));
+			position = glm::rotate(position, y, axis);
+			m_cameraService->lookAt(*m_camera, LookAtParameters{position, glm::vec3(0,0,0), glm::vec3(0, 1, 0)});
+		}
+		if (event.type == SDL_MOUSEWHEEL) {
+			auto direction = glm::normalize(m_camera->getPosition() - m_camera->getTarget());
+			auto position = m_camera->getPosition() + (event.wheel.y * 0.5f)*direction;
+			m_cameraService->lookAt(*m_camera, LookAtParameters{ position, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0) });
+		}
 	}
 
 	void update() override {
-		m_cameraService->lookAt(*m_camera, LookAtParameters{glm::vec3(0, 0, -10), glm::vec3(0), glm::vec3(0, 1, 0)});
+		glClear(GL_COLOR_BUFFER_BIT);
 		m_shaderProgramService->use(*m_program);
 		m_shaderProgramService->setMatrix4(*m_program, 0, glm::mat4());
 		m_shaderProgramService->setMatrix4(*m_program, 1, m_camera->getViewMatrix());

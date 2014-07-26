@@ -11,7 +11,7 @@ class DefaultLoopHandler : public ILoopHandler {
 	bool m_requestQuit;
 public:
 	DefaultLoopHandler();
-	void event(const Event &event) override;
+	void event(const SDL_Event &event) override;
 	void update() override;
 	bool isQuitRequested() override;
 };
@@ -25,9 +25,6 @@ public:
 	void run() override;
 	void setHandler(const std::shared_ptr<ILoopHandler> &handler) override;
 	void requestToQuit() override;
-
-private:
-	Event sdlEventToEvent(SDL_Event &sdlEvent);
 };
 
 } // namespace meow

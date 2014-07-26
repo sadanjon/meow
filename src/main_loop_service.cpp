@@ -8,8 +8,8 @@ namespace meow {
 DefaultLoopHandler::DefaultLoopHandler() : m_requestQuit(false) {
 }
 
-void DefaultLoopHandler::event(const Event &event) {
-	if (event.eventType == EventType::QUIT)
+void DefaultLoopHandler::event(const SDL_Event &event) {
+	if (event.type == SDL_QUIT)
 		m_requestQuit = true;
 }
 
@@ -30,7 +30,7 @@ void MainLoopService::run() {
 	m_running = true;
 	while (m_running && !m_loopHandler->isQuitRequested()) {
 		while (SDL_PollEvent(&event))
-			m_loopHandler->event(sdlEventToEvent(event));
+			m_loopHandler->event(event);
 		m_loopHandler->update();
 	}
 }
@@ -41,14 +41,6 @@ void MainLoopService::setHandler(const std::shared_ptr<ILoopHandler> &handler) {
 
 void MainLoopService::requestToQuit() {
 	m_running = false;
-}
-
-Event MainLoopService::sdlEventToEvent(SDL_Event &sdlEvent) {
-	if (sdlEvent.type == SDL_QUIT) {
-		return Event {EventType::QUIT};
-	} else {
-		return Event{ EventType::UNKNOWN };
-	}
 }
 
 } // namespace meow

@@ -3,22 +3,15 @@
 
 #include <memory>
 
+#include "SDL.h"
+
 namespace meow {
-
-enum class EventType {
-	UNKNOWN,
-	QUIT
-};
-
-struct Event {
-	EventType eventType;
-};
 
 class ILoopHandler {
 public:
 	virtual ~ILoopHandler() {}
 
-	virtual void event(const Event &event) = 0;
+	virtual void event(const SDL_Event &event) = 0;
 	virtual void update() = 0;
 	virtual bool isQuitRequested() = 0;
 };
