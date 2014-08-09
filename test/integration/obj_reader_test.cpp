@@ -31,6 +31,11 @@ void assertVectorExistsEquals(const Optional<T> &a, const T &b) {
 	ASSERT_THAT(a.get(), Eq(b));
 }
 
+template<typename T>
+void assertVectorExistsEquals(const T &a, const T &b) {
+	ASSERT_THAT(a, Eq(b));
+}
+
 const Vertex &getVertexAt(const Model &model, int index) {
 	auto &mesh = *model.meshes->at(0);
 	auto &indices = *mesh.indices;

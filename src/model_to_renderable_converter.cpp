@@ -40,18 +40,20 @@ std::shared_ptr<IVBO> ModelToRenderableConverter::createVertexVBO(const VertexLi
 
 std::vector<float> ModelToRenderableConverter::createVertexData(const VertexList &vertices) {
 	std::vector<float> data;
+	const auto hasNormals = vertices.front()->normal.exists();
+	const auto hasUVs = vertices.front()->uv.exists();
 	for (auto vertex : vertices) {
-		data.push_back(vertex->position.get()[0]);
-		data.push_back(vertex->position.get()[1]);
-		data.push_back(vertex->position.get()[2]);
+		data.push_back(vertex->position[0]);
+		data.push_back(vertex->position[1]);
+		data.push_back(vertex->position[2]);
 
-		if (vertex->normal.exists()) {
+		if (hasNormals) {
 			data.push_back(vertex->normal.get()[0]);
 			data.push_back(vertex->normal.get()[1]);
 			data.push_back(vertex->normal.get()[2]);
 		}
 
-		if (vertex->uv.exists()) {
+		if (hasUVs) {
 			data.push_back(vertex->uv.get()[0]);
 			data.push_back(vertex->uv.get()[1]);
 		}

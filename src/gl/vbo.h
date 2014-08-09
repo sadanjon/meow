@@ -16,7 +16,7 @@ public:
 	VBO &operator=(VBO) = delete;
 	~VBO();
 
-	void setIndexData(const std::vector<uint32_t> &indices) override;
+	void setIndexData(const std::vector<IndexType> &indices) override;
 	void setVertexData(const std::vector<float> &vertices) override;
 	GLuint getID() const override;
 };

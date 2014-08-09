@@ -13,7 +13,7 @@ namespace meow {
 
 class Vertex {
 public:
-	Vertex(Optional<glm::vec3> &position, Optional<glm::vec3> &normal, Optional<glm::vec2> &uv) :
+	Vertex(const glm::vec3 &position, Optional<glm::vec3> &normal, Optional<glm::vec2> &uv) :
 		position(position),
 		normal(normal),
 		uv(uv) {
@@ -22,13 +22,14 @@ public:
 	Vertex() {
 	}
 
-	Optional<glm::vec3> position;
+	glm::vec3 position;
 	Optional<glm::vec3> normal;
 	Optional<glm::vec2> uv;
 };
 
 typedef std::vector<std::shared_ptr<Vertex>> VertexList;
-typedef std::vector<uint32_t> IndexList;
+typedef uint16_t IndexType;
+typedef std::vector<IndexType> IndexList;
 
 struct Mesh {
 	std::shared_ptr<VertexList> vertices;

@@ -1,6 +1,8 @@
 #include "di.h"
 
 #include "entities/camera_service.h"
+#include "entities/normal_generator/normals_generator.h"
+#include "entities/position_mesh/position_mesh_generator_factory.h"
 #include "file_system/file_system_service.h"
 #include "gl/shader_service.h"
 #include "gl/logged_shader_service.h"
@@ -18,6 +20,7 @@ namespace meow {
 
 void initializeDI() {
 	di::Container::registerType<meow::ICameraService, meow::CameraService>();
+	di::Container::registerType<meow::INormalsGenerator, meow::NormalsGenerator>();
 	di::Container::registerType<meow::IFileSystemService, meow::FileSystemService>();
 	di::Container::registerType<meow::IShaderService, meow::LoggedShaderService>();
 	di::Container::registerType<meow::IShaderProgramService, meow::LoggedShaderProgramService>();
@@ -28,8 +31,8 @@ void initializeDI() {
 	di::Container::registerType<meow::IWindowService, meow::WindowService>();
 	di::Container::registerType<meow::IMainLoopService, meow::MainLoopService>();
 	di::Container::registerType<meow::IRenderableService, meow::RenderableService>();
-
-
+	di::Container::registerType<meow::IPositionMeshGeneratorFactory, meow::PositionMeshGeneratorFactory>();
+	
 }
 
 } // namespace meow

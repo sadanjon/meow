@@ -41,20 +41,16 @@ public:
 		return m_value;
 	}
 
+	void set(const T &value) const {
+		m_value = value;
+	}
+
 	bool exists() const {
 		return m_exists;
 	}
 
 	void reset() {
 		m_exists = false;
-	}
-
-	operator bool() const {
-		return m_exists;
-	}
-
-	operator T() const {
-		return m_value;
 	}
 
 	bool operator==(const Optional<T> &other) const {

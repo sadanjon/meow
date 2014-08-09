@@ -10,9 +10,9 @@ VBO::~VBO() {
 	glDeleteBuffers(1, &m_id);
 }
 
-void VBO::setIndexData(const std::vector<uint32_t> &indices) {
+void VBO::setIndexData(const std::vector<IndexType> &indices) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * indices.size(), indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(IndexType) * indices.size(), indices.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 

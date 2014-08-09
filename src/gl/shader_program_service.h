@@ -37,6 +37,7 @@ public:
 	void setUniformIDs(IProgram &program, const std::vector<std::string> &uniforms) override;
 	void setAttributeIDs(IProgram &program, const std::vector<std::string> &attributes) override;
 	void setMatrix4(IProgram &program, int uniformID, const glm::mat4 &matrix4) override;
+	void setVector3(IProgram &program, int uniformID, const glm::vec3 &vector3) override;
 	void enableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) override;
 	void disableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) override;
 	void drawSurface(IProgram &program, const Surface &surface) override;

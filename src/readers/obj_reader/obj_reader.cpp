@@ -18,8 +18,8 @@ int relativeIndexToAbsoluteIndex(const std::vector<std::shared_ptr<T>> &list, in
 }
 
 template<typename T>
-Optional<T> findVector(const std::vector<std::shared_ptr<T>> &list, Optional<int> index) {
-	if (!index)
+Optional<T> findVector(const std::vector<std::shared_ptr<T>> &list, const Optional<int> &index) {
+	if (!index.exists())
 		return Optional<T>();
 	auto i = relativeIndexToAbsoluteIndex(list, index.get());
 	return Optional<T>(*list[i]);
@@ -31,7 +31,7 @@ OBJReader::OBJReader(const std::string &path) : m_filePath(path) {
 std::shared_ptr<Model> OBJReader::read() {
 	createNewModelWithOneMesh();
 	auto lineReader = m_fileSystemService->getLineReader(m_filePath);
-	while (auto line = lineReader->nextLine()) {
+	for (auto line = lineReader->nextLine(); line.exists(); line = lineReader->nextLine()) {
 		tryReadVector(line.get().c_str());
 		tryReadFace(line.get().c_str());
 	}
@@ -152,8 +152,11 @@ void OBJReader::addVertex(std::shared_ptr<VertexIndices> vertexIndices) {
 }
 
 std::shared_ptr<Vertex> OBJReader::createVertex(const VertexIndices &vertexIndices) {
+	auto pos = findVector(m_positions, vertexIndices.position);
+	if (!pos.exists())
+		throw new IOBJReader::IllFormedOBJFile();
 	return std::make_shared<Vertex>(
-		findVector(m_positions, vertexIndices.position),
+		pos.get(),
 		findVector(m_normals, vertexIndices.normal), 
 		findVector(m_uvs, vertexIndices.uv));
 }

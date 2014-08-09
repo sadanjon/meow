@@ -39,6 +39,7 @@ public:
 	virtual void setUniformIDs(IProgram &program, const std::vector<std::string> &uniforms) = 0;
 	virtual void setAttributeIDs(IProgram &program, const std::vector<std::string> &attributes) = 0;
 	virtual void setMatrix4(IProgram &program, int uniformID, const glm::mat4 &matrix4) = 0;
+	virtual void setVector3(IProgram &program, int uniformID, const glm::vec3 &vector3) = 0;
 	virtual void enableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) = 0;
 	virtual void disableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) = 0;
 	virtual void drawSurface(IProgram &program, const Surface &surface) = 0;

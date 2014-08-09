@@ -57,6 +57,11 @@ void ShaderProgramService::setMatrix4(IProgram &program, int uniformID, const gl
 	glUniformMatrix4fv(p.m_uniformIDMap[uniformID], 1, GL_FALSE, glm::value_ptr(matrix4));
 }
 
+void ShaderProgramService::setVector3(IProgram &program, int uniformID, const glm::vec3 &vector3) {
+	auto &p = static_cast<Program&>(program);
+	glUniform3fv(p.m_uniformIDMap[uniformID], 1, glm::value_ptr(vector3));	
+}
+
 void ShaderProgramService::enableSurfaceAttributes(IProgram &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) {
 	auto &p = static_cast<Program&>(program);
 	m_vboService->bindVertexVBO(*surface.vertexVBO);
@@ -75,14 +80,14 @@ void ShaderProgramService::setVertexNormalAttribIfExists(Program &program, const
 	if (!attributeIDs.normal.exists() || !surface.hasNormals)
 		return;
 	glEnableVertexAttribArray(program.m_attributeIDMap[attributeIDs.normal.get()]);
-	setVertexAttribPointer(program.m_attributeIDMap[attributeIDs.normal.get()], 3, surface, sizeof(float)* 3);
+	setVertexAttribPointer(program.m_attributeIDMap[attributeIDs.normal.get()], 3, surface, sizeof(float) * 3);
 }
 
 void ShaderProgramService::setVertexUVAttribIfExists(Program &program, const Surface &surface, const SurfaceAttributeIDs& attributeIDs) {
 	if (!attributeIDs.uv.exists() || !surface.hasUVs)
 		return;
 	glEnableVertexAttribArray(program.m_attributeIDMap[attributeIDs.uv.get()]);
-	setVertexAttribPointer(program.m_attributeIDMap[attributeIDs.uv.get()], 2, surface, sizeof(float)* 5);
+	setVertexAttribPointer(program.m_attributeIDMap[attributeIDs.uv.get()], 2, surface, sizeof(float) * 6);
 }
 
 void ShaderProgramService::setVertexAttribPointer(GLuint id, GLint size, const Surface &surface, int byteOffset) {
@@ -107,7 +112,7 @@ void ShaderProgramService::checkLinkStatus(GLuint programID) {
 
 void ShaderProgramService::drawSurface(IProgram &program, const Surface &surface) {
 	m_vboService->bindIndexVBO(*surface.indexVBO);
-	glDrawElements(GL_TRIANGLES, surface.indexCount, GL_UNSIGNED_INT, (void*)(0));
+	glDrawElements(GL_TRIANGLES, surface.indexCount, GL_UNSIGNED_SHORT, (void*)(0));
 	m_vboService->unbindIndexVBO();
 }
 

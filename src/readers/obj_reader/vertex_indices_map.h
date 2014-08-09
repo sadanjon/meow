@@ -17,8 +17,8 @@ public:
 
 private:
 	std::string indexString(Optional<int> i) {
-		if (i)
-			return "[" + std::to_string(i) + "]";
+		if (i.exists())
+			return "[" + std::to_string(i.get()) + "]";
 		else
 			return "[]";
 	}
