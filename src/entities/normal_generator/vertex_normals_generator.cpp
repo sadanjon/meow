@@ -1,7 +1,5 @@
 #include "vertex_normals_generator.h"
 
-#include <cstdio>
-
 #include "glm/geometric.hpp"
 
 #include "model.h"
@@ -14,6 +12,7 @@ VertexNormalsGenerator::VertexNormalsGenerator(Mesh &mesh, bool clockwiseFaces) 
 void VertexNormalsGenerator::generate() {
 	createPositionMesh();
 	createVertexNormalsList();
+
 	IndexType vertexIndex = 0;
 	for (const auto &vertexNormals : m_vertexNormalsList) {
 		glm::vec3 normal;

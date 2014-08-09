@@ -16,6 +16,7 @@ class LineReader : public ILineReader {
 	size_t m_readLocation;
 	std::vector<char> m_singleCharacter;
 	std::shared_ptr<std::string> m_line;
+	bool m_isEOF;
 	
 public:
 	LineReader(const std::shared_ptr<IFile> &file);

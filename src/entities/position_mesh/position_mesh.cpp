@@ -1,10 +1,6 @@
 #include "position_mesh.h"
 
 namespace meow {
-	
-std::string vec3ToString(const glm::vec3 &v) {
-	return std::to_string(v.x) + "," + std::to_string(v.y) + "," + std::to_string(v.z);
-}
 
 PositionMesh::PositionMesh(std::shared_ptr<Mesh> &mesh, std::shared_ptr<IndexListMap> &vertexMap) :
 	m_mesh(mesh), m_vertexMap(vertexMap) {
@@ -27,7 +23,7 @@ const Vertex &PositionMesh::findVertexAt(IndexType index) const {
 }
 
 const IndexList &PositionMesh::findOriginalVertexIndicesByPosition(const glm::vec3 &position) const {
-	auto &iter = m_vertexMap->find(vec3ToString(position));
+	auto &iter = m_vertexMap->find(position);
 	if (iter == m_vertexMap->end())
 		throw new VertexNotFound();
 	return *iter->second;

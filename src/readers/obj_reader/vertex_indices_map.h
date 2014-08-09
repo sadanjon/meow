@@ -12,19 +12,13 @@ namespace meow {
 class VertexIndicesHasher {
 public:
 	size_t operator()(const std::shared_ptr<VertexIndices> &vertex) {
-		return hashString(indexString(vertex->position) + indexString(vertex->normal) + indexString(vertex->uv));
+		std::hash<int> h;
+		return h(OptionalIntToInt(vertex->position)) ^ h(OptionalIntToInt(vertex->normal)) ^ h(OptionalIntToInt(vertex->uv));
 	}
 
 private:
-	std::string indexString(Optional<int> i) {
-		if (i.exists())
-			return "[" + std::to_string(i.get()) + "]";
-		else
-			return "[]";
-	}
-
-	size_t hashString(std::string &str) {
-		return std::hash<std::string>()(str);
+	int OptionalIntToInt(Optional<int> o) {
+		return o.exists() ? o.get() : -1;
 	}
 };
 

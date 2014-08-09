@@ -1,5 +1,8 @@
 #include "position_mesh_generator.h"
 
+#include <SDL_timer.h>
+#include <cstdio>
+
 namespace meow {
 	
 PositionMeshGenerator::PositionMeshGenerator(const Mesh &mesh) : m_mesh(mesh), m_nextID(0) {
@@ -44,13 +47,12 @@ void PositionMeshGenerator::addVertexToPositionMesh(IndexType index, const std::
 }
 
 IndexType PositionMeshGenerator::addToVertexMapAndReturnIndex(IndexType index, const std::shared_ptr<Vertex> &vertex) {
-	auto posString = vec3ToString(vertex->position);
-	auto &x = m_vertexMap->find(posString);
+	auto &x = m_vertexMap->find(vertex->position);
 	if (x == m_vertexMap->end()) {
 		auto l = std::make_shared<IndexList>();
 		l->push_back(m_nextID++);
 		l->push_back(index);
-		m_vertexMap->insert(std::make_pair(posString, l));
+		m_vertexMap->insert(std::make_pair(vertex->position, l));
 		return l->front();
 	} else {
 		x->second->push_back(index);

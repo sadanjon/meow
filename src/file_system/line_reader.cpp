@@ -6,7 +6,8 @@ LineReader::LineReader(const std::shared_ptr<IFile> &file) :
 	m_file(file),
 	m_buffer(512, 0),
 	m_readLocation(0),
-	m_singleCharacter(1, 'C') {
+	m_singleCharacter(1, 'C'),
+	m_isEOF(false) {
 }
 
 Optional<std::string> LineReader::nextLine() {
@@ -25,7 +26,7 @@ Optional<std::string> LineReader::nextLine() {
 }
 
 void LineReader::readCharacter() {
-	m_file->read(m_singleCharacter);
+	m_isEOF = m_file->read(m_singleCharacter) == 0;
 }
 
 void LineReader::appendCharacterToBuffer() {
@@ -38,7 +39,7 @@ void LineReader::setCurrentReadLocationToNullIfEndOfLineOrFile() {
 }
 
 bool LineReader::isCurrentReadLocationEndOfLineOrFile() {
-	return m_singleCharacter[0] == '\n' || m_file->isEOF();
+	return m_singleCharacter[0] == '\n' || m_isEOF;
 }
 
 
