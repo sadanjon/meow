@@ -105,7 +105,7 @@ int LambertDriver::run(int argc, char **argv)  {
 int LambertDriver::tryRun(int argc, char **argv) {
 	auto program = createProgram();
 	auto model = m_modelService->createFromOBJFile("../assets/teapot.obj");
-	m_modelService->generateNormals(*model, GenerateNormalsOptions{ true, false });
+	m_modelService->generateNormals(*model, GenerateNormalsOptions{ false, false });
 	auto renderable = m_renderableService->createFromModel(*model);
 
 	m_mainLoopService->setHandler(std::make_shared<LambertDriverLoopHandler>(program, renderable));

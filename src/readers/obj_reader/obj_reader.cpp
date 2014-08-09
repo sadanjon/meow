@@ -151,6 +151,7 @@ void OBJReader::addVertex(std::shared_ptr<VertexIndices> vertexIndices) {
 	}
 }
 
+
 std::shared_ptr<Vertex> OBJReader::createVertex(const VertexIndices &vertexIndices) {
 	auto pos = findVector(m_positions, vertexIndices.position);
 	if (!pos.exists())

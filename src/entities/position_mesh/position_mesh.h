@@ -10,7 +10,14 @@
 
 namespace meow {
 
-typedef std::unordered_map<std::string, std::shared_ptr<IndexList>> IndexListMap;
+struct Vec3Hasher {
+	size_t operator()(const glm::vec3 &v) {
+		auto h = std::hash<float>();
+		return h(v.x) ^ h(v.y) ^ h(v.z);
+	}
+};
+
+typedef std::unordered_map<glm::vec3, std::shared_ptr<IndexList>, Vec3Hasher> IndexListMap;
 
 std::string vec3ToString(const glm::vec3 &v);
 

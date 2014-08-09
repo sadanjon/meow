@@ -39,11 +39,10 @@ void File::close() {
 }
 
 size_t File::sdlReadOrThrow(SDL_RWops *sdlrwops, void *ptr, size_t amount) {
-	auto b = SDL_RWtell(m_sdlrwops);
 	auto readCount = SDL_RWread(sdlrwops, ptr, sizeof(char), amount);
 	if (readCount == 0 && *SDL_GetError() != '\0')
 		throw new IFile::FailedToReadFile();
-	return SDL_RWtell(m_sdlrwops) - b;
+	return readCount;
 }
 
 size_t File::getReadCountOrFileSize(size_t readCount) {
