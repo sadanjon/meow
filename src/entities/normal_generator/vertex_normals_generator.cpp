@@ -12,33 +12,28 @@ VertexNormalsGenerator::VertexNormalsGenerator(Mesh &mesh, bool clockwiseFaces) 
 void VertexNormalsGenerator::generate() {
 	createPositionMesh();
 	createVertexNormalsList();
+	setAllAverageNormalsToOriginalMesh();
+}
 
+void VertexNormalsGenerator::setAllAverageNormalsToOriginalMesh() {
 	IndexType vertexIndex = 0;
 	for (const auto &vertexNormals : m_vertexNormalsList) {
-		glm::vec3 normal;
-		if (vertexNormals)
-			normal = averageVectors(*vertexNormals);
-		else
-			normal = glm::vec3(1, 0, 0);
-
-		auto &vertexIndices = m_posMesh->getOriginalVertexIndicesAt(vertexIndex);
-		for (auto i = 0; i < vertexIndices.size(); ++i) {
-			auto &index = vertexIndices[i];
-			m_mesh.vertices->at(index)->normal = normal;
-		}
+		if (!vertexNormals)
+			continue;
+		setAverageNormalToOriginalMesh(vertexIndex, *vertexNormals);
 		vertexIndex += 1;
 	}
 }
 
-glm::vec3 VertexNormalsGenerator::averageVectors(const std::vector<glm::vec3> &vectors) {
-	glm::vec3 n(0);
-	if (vectors.size() == 0)
-		return n;
-	for (const auto &v : vectors) {
-		n += v;
-	}
-	n /= vectors.size();
-	return n;
+void VertexNormalsGenerator::setAverageNormalToOriginalMesh(IndexType vertexIndex, const Vec3List &vertexNormals) {
+	auto normal = averageVectors(vertexNormals);
+	auto &vertexIndices = m_posMesh->getOriginalVertexIndicesAt(vertexIndex);
+	for (const auto &index : vertexIndices)
+		m_mesh.vertices->at(index)->normal = normal;
+}
+
+void VertexNormalsGenerator::createPositionMesh() {
+	m_posMesh = m_positionMeshGeneratorFactory->get(m_mesh)->generate();
 }
 
 void VertexNormalsGenerator::createVertexNormalsList() {
@@ -46,10 +41,17 @@ void VertexNormalsGenerator::createVertexNormalsList() {
 	m_vertexNormalsList.resize(posMesh.vertices->size());
 	std::array<glm::vec3, 3> triangle;
 	for (auto i = 0U; i < posMesh.indices->size(); ++i) {
-		if (i % 3 == 0 && i != 0) 
+		if (i % 3 == 0 && i != 0)
 			addNormalToAllTriangleVerticesInVertexNormalsList(createNormal(triangle), i - 2);
 		triangle[i % 3] = getPositionFromOffset(posMesh, i);
 	}
+}
+
+glm::vec3 VertexNormalsGenerator::averageVectors(const std::vector<glm::vec3> &vectors) {
+	glm::vec3 n(0);
+	for (const auto &v : vectors) 
+		n += v;
+	return glm::normalize(n);
 }
 
 void VertexNormalsGenerator::addNormalToAllTriangleVerticesInVertexNormalsList(const glm::vec3 &normal, IndexType triangleOffset) {
@@ -80,9 +82,7 @@ void VertexNormalsGenerator::addToVertexNormalsList(IndexType index, const glm::
 	m_vertexNormalsList[index]->push_back(normal);
 }
 
-void VertexNormalsGenerator::createPositionMesh() {
-	m_posMesh = m_positionMeshGeneratorFactory->get(m_mesh)->generate();
-}
+
 
 
 

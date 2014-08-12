@@ -15,7 +15,8 @@
 namespace meow {
 	
 class VertexNormalsGenerator {
-	typedef std::vector<std::shared_ptr<std::vector<glm::vec3>>> Vec3ListList;
+	typedef std::vector<glm::vec3> Vec3List;
+	typedef std::vector<std::shared_ptr<Vec3List>> Vec3ListList;
 
 	di::Component<IPositionMeshGeneratorFactory> m_positionMeshGeneratorFactory;
 	Mesh &m_mesh;
@@ -32,6 +33,8 @@ public:
 
 private:
 	glm::vec3 averageVectors(const std::vector<glm::vec3> &vectors);
+	void setAllAverageNormalsToOriginalMesh();
+	void setAverageNormalToOriginalMesh(IndexType vertexIndex, const Vec3List &vertexNormals);
 	void addNormalToAllTriangleVerticesInVertexNormalsList(const glm::vec3 &normal, IndexType triangleOffset);
 	glm::vec3 getPositionFromOffset(const Mesh &mesh, int offset);
 	void createVertexNormalsList();

@@ -60,7 +60,7 @@ void LambertDriverLoopHandler::update() {
 	m_shaderProgramService->setMatrix4(*m_program, 0, glm::mat4());
 	m_shaderProgramService->setMatrix4(*m_program, 1, m_camera->getViewMatrix());
 	m_shaderProgramService->setMatrix4(*m_program, 2, m_camera->getProjectionMatrix());
-	m_shaderProgramService->setVector3(*m_program, 3, glm::vec3(10, -10, 0));
+	m_shaderProgramService->setVector3(*m_program, 3, glm::vec3(10, 10, 0));
 	for (auto &surface : *m_renderable->surfaces) {
 		m_shaderProgramService->enableSurfaceAttributes(*m_program, *surface, SurfaceAttributeIDs{ 0, 1 });
 		m_shaderProgramService->drawSurface(*m_program, *surface);
